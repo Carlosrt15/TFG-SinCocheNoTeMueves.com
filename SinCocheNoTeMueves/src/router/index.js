@@ -10,6 +10,9 @@ import Perfil from '../views/PerfilView.vue'
 import Contacto from '../views/ContactoView.vue'
 import Chat from '../views/ChatView.vue'
 import Admin from '../views/AdminView.vue'
+import PublicarVehiculo from '../views/PublicarVehiculoView.vue'
+import EditarVehiculo from '../views/EditarVehiculoView.vue'
+import ConfirmarCompra from '../views/ConfirmarCompraView.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -21,8 +24,18 @@ const routes = [
   { path: '/perfil', component: Perfil },
   { path: '/contacto', component: Contacto },
   { path: '/chat', component: Chat },
-  { path: '/admin', component: Admin }
+  { path: '/admin', component: Admin },
+  { path: '/publicar', component: PublicarVehiculo },
+  { path: '/editar/:id', component: EditarVehiculo },
+  { path: '/comprar/:id', component: ConfirmarCompra }
 ]
+
+
+
+
+
+
+  
 
 export default createRouter({
   history: createWebHistory(),

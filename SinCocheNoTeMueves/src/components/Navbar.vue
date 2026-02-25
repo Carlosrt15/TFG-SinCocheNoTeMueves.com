@@ -15,6 +15,8 @@
       <router-link to="/chat">Chat</router-link>
       <router-link to="/perfil">Perfil</router-link>
       <router-link to="/login">Login</router-link>
+      <router-link to="/registro">Registrarse</router-link>
+      <router-link to="/publicar">Vender</router-link>
     </div>
   </nav>
 </template>

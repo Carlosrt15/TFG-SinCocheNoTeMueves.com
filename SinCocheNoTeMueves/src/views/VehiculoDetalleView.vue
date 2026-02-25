@@ -1,37 +1,47 @@
 <template>
   <div class="container">
-    <h2>Detalle del Vehículo</h2>
+    <h2>{{ vehiculo.marca }} {{ vehiculo.modelo }}</h2>
+    <p>Estado: {{ vehiculo.estado }}</p>
+    <p>Precio: {{ vehiculo.precio }} €</p>
 
-    <div v-if="vehiculo">
-      <p><strong>Marca:</strong> {{ vehiculo.marca }}</p>
-      <p><strong>Modelo:</strong> {{ vehiculo.modelo }}</p>
-      <p><strong>Estado:</strong> {{ vehiculo.estado }}</p>
-      <p><strong>Precio:</strong> {{ vehiculo.precio }} €</p>
-    </div>
+    <router-link :to="'/comprar/' + vehiculo.id">
+      <button class="comprar">Comprar</button>
+    </router-link>
 
-    <div v-else>
-      <p>Vehículo no encontrado</p>
-    </div>
+    <router-link :to="'/editar/' + vehiculo.id">
+      <button class="editar">Editar</button>
+    </router-link>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const vehiculo = ref({
+const vehiculo = {
   id: route.params.id,
-  marca: 'BMW',
-  modelo: 'X5',
-  estado: 'Nuevo',
-  precio: 30000
-})
+  marca: 'Audi',
+  modelo: 'A4',
+  estado: 'Usado',
+  precio: 15000
+}
 </script>
 
 <style scoped>
 .container {
-  padding: 30px;
+  padding: 40px;
+}
+button {
+  margin-right: 10px;
+  padding: 10px 15px;
+}
+.comprar {
+  background: green;
+  color: white;
+}
+.editar {
+  background: orange;
+  color: white;
 }
 </style>

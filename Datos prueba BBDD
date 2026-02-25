@@ -1,0 +1,11 @@
+INSERT INTO usuarios (nombre, apellidos, dni, email, password, telefono, rol)
+VALUES ('Admin', 'Principal', '00000000A', 'admin@test.com', '1234', '600000000', 'ADMIN');
+
+INSERT INTO usuarios (nombre, apellidos, dni, email, password, telefono)
+VALUES ('Juan', 'Perez', '11111111B', 'juan@test.com', '1234', '600111111');
+
+INSERT INTO vehiculos (marca, modelo, estado, precio, propietario_id)
+VALUES ('Audi', 'A4', 'Usado', 15000, 2);
+
+INSERT INTO vehiculos (marca, modelo, estado, precio, propietario_id)
+VALUES ('BMW', 'X5', 'Nuevo', 30000, 2);

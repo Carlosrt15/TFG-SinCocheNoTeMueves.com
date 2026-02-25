@@ -1,12 +1,20 @@
 <template>
   <div class="container">
     <h2>Catálogo de Vehículos</h2>
-    <input v-model="busqueda" placeholder="Buscar por marca..." />
-    <VehiculoCard
-      v-for="v in filtrados"
-      :key="v.id"
-      :vehiculo="v"
+
+    <input 
+      v-model="busqueda" 
+      placeholder="Buscar por marca o modelo..." 
+      class="buscador"
     />
+
+    <div class="grid">
+      <VehiculoCard
+        v-for="v in filtrados"
+        :key="v.id"
+        :vehiculo="v"
+      />
+    </div>
   </div>
 </template>
 
@@ -17,10 +25,38 @@ import VehiculoCard from '../components/VehiculoCard.vue'
 const busqueda = ref('')
 
 const vehiculos = ref([
-  { id: 1, marca: 'Audi', modelo: 'A4', estado: 'Usado', precio: 15000 },
-  { id: 2, marca: 'BMW', modelo: 'X5', estado: 'Nuevo', precio: 30000 },
-  { id: 3, marca: 'Mercedes', modelo: 'Clase C', estado: 'Usado', precio: 22000 },
-  { id: 4, marca: 'Audi', modelo: 'Q7', estado: 'Nuevo', precio: 45000 }
+  {
+    id: 1,
+    marca: 'Audi',
+    modelo: 'A4',
+    estado: 'Usado',
+    precio: 15000,
+    imagen: 'https://images.unsplash.com/photo-1549924231-f129b911e442'
+  },
+  {
+    id: 2,
+    marca: 'BMW',
+    modelo: 'X5',
+    estado: 'Nuevo',
+    precio: 30000,
+    imagen: 'https://images.unsplash.com/photo-1555215695-3004980ad54e'
+  },
+  {
+    id: 3,
+    marca: 'Mercedes',
+    modelo: 'Clase C',
+    estado: 'Usado',
+    precio: 22000,
+    imagen: 'https://images.unsplash.com/photo-1502877338535-766e1452684a'
+  },
+  {
+    id: 4,
+    marca: 'Audi',
+    modelo: 'Q7',
+    estado: 'Nuevo',
+    precio: 45000,
+    imagen: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8'
+  }
 ])
 
 const filtrados = computed(() => {
@@ -29,9 +65,31 @@ const filtrados = computed(() => {
   if (!texto) return vehiculos.value
 
   return vehiculos.value.filter(v => {
-    const marca = v.marca.toLowerCase()
-    const modelo = v.modelo.toLowerCase()
-    return marca.includes(texto) || modelo.includes(texto)
+    return (
+      v.marca.toLowerCase().includes(texto) ||
+      v.modelo.toLowerCase().includes(texto)
+    )
   })
 })
 </script>
+
+<style scoped>
+.container {
+  padding: 40px 20px;
+}
+
+.buscador {
+  max-width: 400px;
+  display: block;
+  margin: 0 auto 40px auto;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
+}
+</style>

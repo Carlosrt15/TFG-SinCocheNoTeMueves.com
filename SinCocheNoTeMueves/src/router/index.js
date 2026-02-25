@@ -19,7 +19,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/registro', component: Registro },
   { path: '/vehiculos', component: Vehiculos },
-  { path: '/vehiculos/:id', component: VehiculoDetalle },
+  { path: '/vehiculo/:id', component: VehiculoDetalle },
   { path: '/favoritos', component: Favoritos },
   { path: '/perfil', component: Perfil },
   { path: '/contacto', component: Contacto },

@@ -8,9 +8,22 @@
       <p>{{ vehiculo.estado }}</p>
       <p class="precio">{{ vehiculo.precio.toLocaleString() }} €</p>
 
-      <button @click="agregarFavorito">
-        ⭐ Añadir a favoritos
-      </button>
+      <div class="botones">
+
+        <!-- Botón Ver Detalle -->
+        <router-link :to="'/vehiculo/' + vehiculo.id">
+          <button class="detalle">
+            Ver detalle
+          </button>
+        </router-link>
+
+        <!-- Botón Añadir Favorito -->
+        <button class="favorito" @click="agregarFavorito">
+          ⭐
+        </button>
+
+      </div>
+
     </div>
 
   </div>
@@ -21,7 +34,9 @@ import { defineProps } from 'vue'
 
 const props = defineProps(['vehiculo'])
 
-/* Añade vehículo a favoritos */
+/*
+  Añade vehículo a favoritos sin duplicarlo
+*/
 const agregarFavorito = () => {
   let favoritos = JSON.parse(localStorage.getItem('favoritos')) || []
 
@@ -31,7 +46,7 @@ const agregarFavorito = () => {
     favoritos.push(props.vehiculo)
     localStorage.setItem('favoritos', JSON.stringify(favoritos))
 
-    // Forzamos actualización del navbar
+    // Actualiza contador navbar
     window.dispatchEvent(new Event('storage'))
 
     alert('Añadido a favoritos')
@@ -69,18 +84,30 @@ img {
   color: #0077ff;
 }
 
-button {
+.botones {
+  display: flex;
+  gap: 10px;
   margin-top: 10px;
-  width: 100%;
+}
+
+.detalle {
+  flex: 1;
   padding: 10px;
   background: #0077ff;
   border: none;
   color: white;
   border-radius: 8px;
+}
+
+.favorito {
+  width: 50px;
+  background: gold;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-button:hover {
-  background: #005edb;
+.favorito:hover {
+  background: orange;
 }
 </style>

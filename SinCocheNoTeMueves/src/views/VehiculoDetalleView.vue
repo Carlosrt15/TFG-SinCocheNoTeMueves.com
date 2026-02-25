@@ -1,47 +1,114 @@
 <template>
   <div class="container">
-    <h2>{{ vehiculo.marca }} {{ vehiculo.modelo }}</h2>
-    <p>Estado: {{ vehiculo.estado }}</p>
-    <p>Precio: {{ vehiculo.precio }} €</p>
 
-    <router-link :to="'/comprar/' + vehiculo.id">
-      <button class="comprar">Comprar</button>
-    </router-link>
+    <div class="card">
+      <h2>{{ vehiculo.marca }} {{ vehiculo.modelo }}</h2>
 
-    <router-link :to="'/editar/' + vehiculo.id">
-      <button class="editar">Editar</button>
-    </router-link>
+      <p><strong>Estado:</strong> {{ vehiculo.estado }}</p>
+      <p><strong>Precio:</strong> {{ vehiculo.precio.toLocaleString() }} €</p>
+
+      <p v-if="!vehiculo.disponible" class="vendido">
+         Este vehículo ya ha sido vendido 
+      </p>
+
+      <button 
+        v-if="vehiculo.disponible"
+        @click="confirmarCompra"
+        class="comprar"
+      >
+        Comprar
+      </button>
+
+      <p v-if="mensaje" class="exito">{{ mensaje }}</p>
+    </div>
+
   </div>
 </template>
 
 <script setup>
+import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const mensaje = ref('')
 
-const vehiculo = {
+const vehiculo = reactive({
   id: route.params.id,
   marca: 'Audi',
   modelo: 'A4',
   estado: 'Usado',
-  precio: 15000
+  precio: 15000,
+  disponible: true
+})
+
+/*
+  Muestra confirmación de seguridad
+*/
+const confirmarCompra = () => {
+
+  const confirmar = window.confirm(
+    `¿Estás seguro de realizar la compra del ${vehiculo.marca} ${vehiculo.modelo} por ${vehiculo.precio.toLocaleString()} €?`
+  )
+
+  if (confirmar) {
+    realizarCompra()
+  }
+}
+
+/*
+  Simulación de compra
+*/
+const realizarCompra = () => {
+
+  let compras = JSON.parse(localStorage.getItem('compras')) || []
+
+  compras.push({
+    vehiculoId: vehiculo.id,
+    nombre: vehiculo.marca + " " + vehiculo.modelo,
+    precio: vehiculo.precio,
+    fecha: new Date()
+  })
+
+  localStorage.setItem('compras', JSON.stringify(compras))
+
+  vehiculo.disponible = false
+
+  mensaje.value = "Compra realizada correctamente :)"
 }
 </script>
 
 <style scoped>
 .container {
   padding: 40px;
+  display: flex;
+  justify-content: center;
 }
-button {
-  margin-right: 10px;
-  padding: 10px 15px;
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  width: 400px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
+
 .comprar {
+  margin-top: 15px;
+  padding: 10px 15px;
   background: green;
   color: white;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
 }
-.editar {
-  background: orange;
-  color: white;
+
+.vendido {
+  color: red;
+  font-weight: bold;
+}
+
+.exito {
+  color: green;
+  margin-top: 15px;
 }
 </style>

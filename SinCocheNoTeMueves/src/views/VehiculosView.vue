@@ -31,7 +31,8 @@ const vehiculos = ref([
     modelo: 'A4',
     estado: 'Usado',
     precio: 15000,
-    imagen: 'https://images.unsplash.com/photo-1549924231-f129b911e442'
+    imagen: 'https://images.unsplash.com/photo-1549924231-f129b911e442',
+    disponible: true
   },
   {
     id: 2,
@@ -39,7 +40,8 @@ const vehiculos = ref([
     modelo: 'X5',
     estado: 'Nuevo',
     precio: 30000,
-    imagen: 'https://images.unsplash.com/photo-1555215695-3004980ad54e'
+    imagen: 'https://images.unsplash.com/photo-1555215695-3004980ad54e',
+    disponible: true
   },
   {
     id: 3,
@@ -47,7 +49,8 @@ const vehiculos = ref([
     modelo: 'Clase C',
     estado: 'Usado',
     precio: 22000,
-    imagen: 'https://images.unsplash.com/photo-1502877338535-766e1452684a'
+    imagen: 'https://images.unsplash.com/photo-1502877338535-766e1452684a',
+    disponible: true
   },
   {
     id: 4,
@@ -55,7 +58,8 @@ const vehiculos = ref([
     modelo: 'Q7',
     estado: 'Nuevo',
     precio: 45000,
-    imagen: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8'
+    imagen: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8',
+    disponible: true
   }
 ])
 

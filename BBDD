@@ -1,0 +1,114 @@
+-- ==========================================
+-- CREAR BASE DE DATOS
+-- ==========================================
+
+CREATE DATABASE IF NOT EXISTS sincochenotemueves;
+USE sincochenotemueves;
+
+-- ==========================================
+-- TABLA USUARIOS
+-- ==========================================
+
+CREATE TABLE usuarios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(150) NOT NULL,
+    dni VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    telefono VARCHAR(20),
+    rol ENUM('USER','ADMIN') DEFAULT 'USER'
+);
+
+-- ==========================================
+-- TABLA VEHICULOS
+-- ==========================================
+
+CREATE TABLE vehiculos (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    marca VARCHAR(100) NOT NULL,
+    modelo VARCHAR(100) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    disponible BOOLEAN DEFAULT TRUE,
+    propietario_id BIGINT NOT NULL,
+    FOREIGN KEY (propietario_id) 
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+);
+
+-- ==========================================
+-- TABLA FAVORITOS
+-- ==========================================
+
+CREATE TABLE favoritos (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    vehiculo_id BIGINT NOT NULL,
+    UNIQUE(usuario_id, vehiculo_id),
+    FOREIGN KEY (usuario_id) 
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (vehiculo_id) 
+        REFERENCES vehiculos(id)
+        ON DELETE CASCADE
+);
+
+-- ==========================================
+-- TABLA RESEÑAS
+-- ==========================================
+
+CREATE TABLE resenas (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    opinion TEXT,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) 
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+);
+
+-- ==========================================
+-- TABLA CHAT
+-- ==========================================
+
+CREATE TABLE chat (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    sala VARCHAR(100) NOT NULL,
+    mensaje TEXT NOT NULL,
+    usuario_id BIGINT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) 
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+);
+
+-- ==========================================
+-- TABLA CONTACTO
+-- ==========================================
+
+CREATE TABLE contacto (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(150) NOT NULL,
+    correo VARCHAR(150) NOT NULL,
+    asunto VARCHAR(200) NOT NULL,
+    mensaje TEXT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ==========================================
+-- TABLA MODERACION
+-- ==========================================
+
+CREATE TABLE moderacion (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    admin_id BIGINT NOT NULL,
+    usuario_afectado_id BIGINT,
+    accion TEXT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_id) 
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+);

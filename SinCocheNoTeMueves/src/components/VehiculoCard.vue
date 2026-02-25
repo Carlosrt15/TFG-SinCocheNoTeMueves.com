@@ -19,7 +19,7 @@
 
         <!-- Botón Añadir Favorito -->
         <button class="favorito" @click="agregarFavorito">
-          ⭐
+          ⭐ Fav
         </button>
 
       </div>

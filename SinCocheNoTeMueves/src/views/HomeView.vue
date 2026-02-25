@@ -6,6 +6,8 @@
       <div class="hero-content">
         <h1>Sin Coche No Te Mueves</h1>
         <p>Compra, vende o alquila vehículos de forma rápida y segura.</p>
+        
+        <p>No te quedes con un SsangYong… cuando puedes conducir tus sueños.</p>
         <router-link to="/vehiculos">
           <button>Ver Vehículos</button>
         </router-link>

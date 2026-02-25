@@ -2,6 +2,12 @@ body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background: #f4f6f9;
+  display: flex;
+  flex-direction: column;
+}
+html, body, #app {
+  height: 100%;
+  margin: 0;
 }
 
 .container {
@@ -36,4 +42,19 @@ input, textarea {
   margin-bottom: 15px;
   border-radius: 6px;
   border: 1px solid #ccc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
 }

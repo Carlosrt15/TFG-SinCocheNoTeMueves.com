@@ -23,4 +23,8 @@ import Footer from './components/Footer.vue'
 .main-content {
   flex: 1;
 }
+
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
 </style>

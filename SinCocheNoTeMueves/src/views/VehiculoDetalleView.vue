@@ -1,53 +1,47 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="vehiculo">
 
-    <div class="card">
-      <h2>{{ vehiculo.marca }} {{ vehiculo.modelo }}</h2>
+    <h2>{{ vehiculo.marca }} {{ vehiculo.modelo }}</h2>
 
-      <p><strong>Estado:</strong> {{ vehiculo.estado }}</p>
-      <p><strong>Precio:</strong> {{ vehiculo.precio.toLocaleString() }} €</p>
+    <p><strong>Estado:</strong> {{ vehiculo.estado }}</p>
+    <p><strong>Precio:</strong> {{ vehiculo.precio.toLocaleString() }} €</p>
 
-      <p v-if="!vehiculo.disponible" class="vendido">
-         Este vehículo ya ha sido vendido 
-      </p>
+    <p v-if="!vehiculo.disponible" class="vendido">
+      🚫 Vehículo vendido 🚫 ;(
+    </p>
 
-      <button 
-        v-if="vehiculo.disponible"
-        @click="confirmarCompra"
-        class="comprar"
-      >
-        Comprar
-      </button>
+    <button 
+      v-if="vehiculo.disponible"
+      @click="confirmarCompra"
+      class="comprar"
+    >
+      Comprar
+    </button>
 
-      <p v-if="mensaje" class="exito">{{ mensaje }}</p>
-    </div>
+    <p v-if="mensaje" class="exito">{{ mensaje }}</p>
 
   </div>
+
+  <p v-else>Vehículo no encontrado</p>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const vehiculo = ref(null)
 const mensaje = ref('')
 
-const vehiculo = reactive({
-  id: route.params.id,
-  marca: 'Audi',
-  modelo: 'A4',
-  estado: 'Usado',
-  precio: 15000,
-  disponible: true
+onMounted(() => {
+  const lista = JSON.parse(localStorage.getItem('vehiculos')) || []
+  vehiculo.value = lista.find(v => v.id == route.params.id)
 })
 
-/*
-  Muestra confirmación de seguridad
-*/
 const confirmarCompra = () => {
 
   const confirmar = window.confirm(
-    `¿Estás seguro de realizar la compra del ${vehiculo.marca} ${vehiculo.modelo} por ${vehiculo.precio.toLocaleString()} €?`
+    `¿Estás seguro de realizar la compra del ${vehiculo.value.marca} ${vehiculo.value.modelo} por ${vehiculo.value.precio.toLocaleString()} €?`
   )
 
   if (confirmar) {
@@ -55,51 +49,33 @@ const confirmarCompra = () => {
   }
 }
 
-/*
-  Simulación de compra
-*/
 const realizarCompra = () => {
 
-  let compras = JSON.parse(localStorage.getItem('compras')) || []
+  const lista = JSON.parse(localStorage.getItem('vehiculos')) || []
 
-  compras.push({
-    vehiculoId: vehiculo.id,
-    nombre: vehiculo.marca + " " + vehiculo.modelo,
-    precio: vehiculo.precio,
-    fecha: new Date()
-  })
+  const index = lista.findIndex(v => v.id == vehiculo.value.id)
 
-  localStorage.setItem('compras', JSON.stringify(compras))
+  if (index !== -1) {
+    lista[index].disponible = false
+    localStorage.setItem('vehiculos', JSON.stringify(lista))
+    vehiculo.value.disponible = false
+  }
 
-  vehiculo.disponible = false
-
-  mensaje.value = "Compra realizada correctamente :)"
+  mensaje.value = "Compra realizada correctamente "
 }
 </script>
 
 <style scoped>
 .container {
   padding: 40px;
-  display: flex;
-  justify-content: center;
-}
-
-.card {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  width: 400px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 .comprar {
-  margin-top: 15px;
   padding: 10px 15px;
   background: green;
   color: white;
   border: none;
   border-radius: 8px;
-  width: 100%;
 }
 
 .vendido {
@@ -109,6 +85,6 @@ const realizarCompra = () => {
 
 .exito {
   color: green;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 </style>

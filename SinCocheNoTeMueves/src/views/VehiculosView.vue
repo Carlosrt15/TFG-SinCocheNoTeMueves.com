@@ -60,6 +60,16 @@ const vehiculos = ref([
     precio: 45000,
     imagen: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8',
     disponible: true
+  },
+  {
+    id: 5,
+    marca: 'Fiat',
+    modelo: 'Bravo Sport',
+    estado: 'Usado',
+    precio: 3600,
+    imagen: 'src/img/fiat.jpg',
+    disponible: true
+
   }
 ])
 

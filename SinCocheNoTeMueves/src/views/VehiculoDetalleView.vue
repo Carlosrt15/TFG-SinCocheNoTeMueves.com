@@ -63,10 +63,11 @@ const realizarCompra = () => {
   let compras = JSON.parse(localStorage.getItem('compras')) || []
 
   compras.push({
-    vehiculoId: vehiculo.id,
-    nombre: vehiculo.marca + " " + vehiculo.modelo,
+    id: vehiculo.id,
+    marca: vehiculo.marca,
+    modelo: vehiculo.modelo,
     precio: vehiculo.precio,
-    fecha: new Date()
+    fecha: new Date().toLocaleDateString('es-ES')
   })
 
   localStorage.setItem('compras', JSON.stringify(compras))

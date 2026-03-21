@@ -1,37 +1,32 @@
-package com.tfg.backend.controller;
+package com.tfg.backend.service;
 
 import com.tfg.backend.model.Usuario;
+
 import com.tfg.backend.repository.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@RestController
+@Service
 
-@RequestMapping("/api/auth")
-
-@CrossOrigin(origins="http://localhost:5173")
-
-public class AuthController {
+public class AuthService {
 
     @Autowired
 
     UsuarioRepository repo;
 
-    @PostMapping("/login")
-
-    public Usuario login(@RequestBody Usuario request){
+    public Usuario login(String email,String password){
 
         Optional<Usuario> usuario=
-                repo.findByEmail(request.getEmail());
+                repo.findByEmail(email);
 
         if(usuario.isPresent()){
 
             if(usuario.get().getPassword()
-                    .equals(request.getPassword())){
+                    .equals(password)){
 
                 return usuario.get();
 

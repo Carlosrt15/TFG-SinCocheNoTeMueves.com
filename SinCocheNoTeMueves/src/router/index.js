@@ -15,29 +15,82 @@ import EditarVehiculo from '../views/EditarVehiculoView.vue'
 import ConfirmarCompra from '../views/ConfirmarCompraView.vue'
 
 const routes = [
+
   { path: '/', component: Home },
+
   { path: '/login', component: Login },
+
   { path: '/registro', component: Registro },
+
   { path: '/vehiculos', component: Vehiculos },
+
   { path: '/vehiculo/:id', component: VehiculoDetalle },
+
   { path: '/favoritos', component: Favoritos },
+
   { path: '/perfil', component: Perfil },
+
   { path: '/contacto', component: Contacto },
+
   { path: '/chat', component: Chat },
+
   { path: '/admin', component: Admin },
+
   { path: '/publicar', component: PublicarVehiculo },
+
   { path: '/editar/:id', component: EditarVehiculo },
+
   { path: '/comprar/:id', component: ConfirmarCompra }
+
 ]
 
+const router = createRouter({
 
-
-
-
-
-  
-
-export default createRouter({
   history: createWebHistory(),
+
   routes
+
 })
+
+/* PROTECCION JWT */
+
+router.beforeEach((to, from, next) => {
+
+  const token =
+    localStorage.getItem("token")
+
+  const rutasProtegidas = [
+
+    "/perfil",
+
+    "/favoritos",
+
+    "/chat",
+
+    "/publicar",
+
+    "/admin"
+
+  ]
+
+  if (
+
+    rutasProtegidas.includes(to.path)
+
+    && !token
+
+  ) {
+
+    next("/login")
+
+  }
+
+  else {
+
+    next()
+
+  }
+
+})
+
+export default router

@@ -1,31 +1,42 @@
 import axios from "axios"
-//no tocar
+
 const api = axios.create({
 
-baseURL:"http://localhost:8080/api",
+// NO TOCAR CORTO CABEZAS
+
+baseURL:
+"http://localhost:8080/api",
 
 headers:{
 
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 
 }
 
 })
 
-api.interceptors.request.use(config=>{
+api.interceptors.request.use(
 
-const token=
-localStorage.getItem("token")
+config=>{
+
+const token =
+localStorage.getItem(
+"token"
+)
 
 if(token){
 
 config.headers.Authorization=
+
 "Bearer "+token
 
 }
 
 return config
 
-})
+}
+
+)
 
 export default api

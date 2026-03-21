@@ -92,7 +92,7 @@ const registrar = async () => {
       Cuando backend funcionando,
       esto enviará los datos al endpoint /registro
     */
-    await api.post('/registro', form)
+    await api.post('/usuarios/registro', form)
 
     mensajeExito.value = "Usuario registrado correctamente"
 

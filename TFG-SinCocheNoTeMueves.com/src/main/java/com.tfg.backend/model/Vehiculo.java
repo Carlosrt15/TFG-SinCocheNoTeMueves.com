@@ -81,5 +81,7 @@ public class Vehiculo {
     public void setPropietario(Usuario propietario){
         this.propietario=propietario;
     }
-
+    public void setId(Long id){
+        this.id=id;
+    }
 }

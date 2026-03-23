@@ -46,6 +46,11 @@
         </button>
 
       </form>
+
+      <p class="login-link">
+        ¿Ya tienes cuenta?
+        <router-link to="/login">Inicia sesión</router-link>
+      </p>
     </div>
   </div>
 </template>
@@ -130,11 +135,18 @@ const registrar = async () => {
 h2 {
   text-align: center;
   margin-bottom: 25px;
+  color: #1a1a2e;
+  font-size: 1.8rem;
 }
 
 .input-group {
   display: flex;
   gap: 15px;
+}
+
+.input-group input {
+  flex: 1;
+  min-width: 0;
 }
 
 input {
@@ -143,33 +155,35 @@ input {
   margin-bottom: 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 0.95rem;
   transition: 0.3s;
 }
 
 input:focus {
   border-color: #0077ff;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0,119,255,0.2);
+  box-shadow: 0 0 0 3px rgba(0,119,255,0.15);
 }
 
 button {
   width: 100%;
-  padding: 12px;
-  background: #1dd6c7;
+  padding: 13px;
+  background: #0077ff;
   border: none;
   color: white;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 1rem;
   transition: 0.3s;
 }
 
 button:hover {
-  background: #3bc43b;
+  background: #005edb;
 }
 
 button:disabled {
-  background: gray;
+  background: #a0a0a0;
   cursor: not-allowed;
 }
 
@@ -178,6 +192,7 @@ button:disabled {
   margin-bottom: 15px;
   border-radius: 8px;
   text-align: center;
+  font-size: 0.9rem;
 }
 
 .exito {
@@ -190,9 +205,30 @@ button:disabled {
   color: #721c24;
 }
 
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.login-link a {
+  color: #0077ff;
+  font-weight: bold;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   .input-group {
     flex-direction: column;
+    gap: 0;
+  }
+
+  .registro-card {
+    padding: 25px;
   }
 }
 </style>

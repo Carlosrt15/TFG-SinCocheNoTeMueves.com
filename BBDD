@@ -112,3 +112,11 @@ CREATE TABLE moderacion (
         REFERENCES usuarios(id)
         ON DELETE CASCADE
 );
+
+
+------------------
+-- crear admin 
+
+UPDATE usuarios 
+SET rol='ADMIN'
+WHERE email='admin@test.com';

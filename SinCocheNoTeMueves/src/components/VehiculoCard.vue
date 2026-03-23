@@ -1,6 +1,5 @@
 <template>
   <div class="card">
-
     <img :src="vehiculo.imagen" alt="coche" />
 
     <div class="info">
@@ -9,51 +8,35 @@
       <p class="precio">{{ vehiculo.precio.toLocaleString() }} €</p>
 
       <div class="botones">
-
         <!-- Botón Ver Detalle -->
         <router-link :to="'/vehiculo/' + vehiculo.id">
-          <button class="detalle">
-            Ver detalle
-          </button>
+          <button class="detalle">Ver detalle</button>
         </router-link>
 
         <!-- Botón Añadir Favorito -->
-        <button class="favorito" @click="agregarFavorito">
-          ⭐ Fav
-        </button>
-
+        <button class="favorito" @click="agregarFavorito">⭐ Fav</button>
       </div>
-
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+//Dejamos de usar datos falsos y usamos appBack
+import { defineProps } from "vue";
 
-const props = defineProps(['vehiculo'])
+import api from "../services/api";
 
-/*
-  Añade vehículo a favoritos sin duplicarlo
-*/
-const agregarFavorito = () => {
-  let favoritos = JSON.parse(localStorage.getItem('favoritos')) || []
+const props = defineProps(["vehiculo"]);
 
-  const existe = favoritos.find(f => f.id === props.vehiculo.id)
+const agregarFavorito = async () => {
+  try {
+    await api.post("/favoritos/" + props.vehiculo.id);
 
-  if (!existe) {
-    favoritos.push(props.vehiculo)
-    localStorage.setItem('favoritos', JSON.stringify(favoritos))
-
-    // Actualiza contador navbar
-    window.dispatchEvent(new Event('storage'))
-
-    alert('Añadido a favoritos')
-  } else {
-    alert('Ya está en favoritos')
+    alert("Añadido a favoritos");
+  } catch {
+    alert("Debes iniciar sesión");
   }
-}
+};
 </script>
 
 <style scoped>
@@ -61,7 +44,7 @@ const agregarFavorito = () => {
   background: white;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
 }
 

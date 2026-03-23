@@ -2,8 +2,6 @@ import axios from "axios"
 
 const api = axios.create({
 
-// NO TOCAR CORTO CABEZAS
-
 baseURL:
 "http://localhost:8080/api",
 

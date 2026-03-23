@@ -11,6 +11,7 @@
 </template>
 
 <script setup>
+// cambios para usar datos reales del back no de test
 import { ref, computed, onMounted } from "vue";
 
 import VehiculoCard from "../components/VehiculoCard.vue";

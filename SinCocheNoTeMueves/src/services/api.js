@@ -2,38 +2,43 @@ import axios from "axios"
 
 const api = axios.create({
 
-baseURL:
-"http://localhost:8080/api",
+    baseURL:"http://localhost:8080/api",
 
-headers:{
-
-"Content-Type":
-"application/json"
-
-}
+    headers:{
+        "Content-Type":"application/json"
+    }
 
 })
 
+/*
+ Añade automáticamente el JWT
+ a todas las peticiones
+*/
 api.interceptors.request.use(
 
-config=>{
+    config=>{
 
-const token =
-localStorage.getItem(
-"token"
-)
+        const token=
 
-if(token){
+            localStorage.getItem("token")
 
-config.headers.Authorization=
+        if(token && token!="null"){
 
-"Bearer "+token
+            config.headers.Authorization=
 
-}
+                "Bearer "+token
 
-return config
+        }
 
-}
+        return config
+
+    },
+
+    error=>{
+
+        return Promise.reject(error)
+
+    }
 
 )
 

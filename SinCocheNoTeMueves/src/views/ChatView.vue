@@ -60,7 +60,7 @@
               <p>{{ convActual?.vehiculo }}</p>
             </div>
             <div class="chat-header-actions">
-              <button class="chat-action-btn" title="Llamar">📞</button>
+              
               <button class="chat-action-btn" title="Más opciones">⋯</button>
             </div>
           </div>

@@ -19,26 +19,37 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
+import { getVehiculo, actualizarVehiculo } from '../services/vehiculoService'
 
 const route = useRoute()
 
 const vehiculo = reactive({
-  id: route.params.id,
-  marca: 'Audi',
-  modelo: 'A4',
-  estado: 'Usado',
-  precio: 15000
+  id: null,
+  marca: '',
+  modelo: '',
+  estado: '',
+  precio: 0
 })
 
 const mensaje = ref('')
 
-const guardar = () => {
-  /*
-    Aquí irá:
-    await api.put('/vehiculos/' + vehiculo.id, vehiculo)
-  */
-  mensaje.value = "Cambios guardados correctamente"
+onMounted(async () => {
+  try {
+    const data = await getVehiculo(route.params.id)
+    Object.assign(vehiculo, data)
+  } catch {
+    mensaje.value = 'Error al cargar el vehículo'
+  }
+})
+
+const guardar = async () => {
+  try {
+    await actualizarVehiculo(vehiculo.id, vehiculo)
+    mensaje.value = "Cambios guardados correctamente"
+  } catch {
+    mensaje.value = "Error al guardar los cambios"
+  }
 }
 </script>
 

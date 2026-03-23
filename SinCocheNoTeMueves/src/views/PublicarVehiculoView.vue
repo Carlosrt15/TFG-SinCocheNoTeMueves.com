@@ -19,6 +19,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
+import { crearVehiculo } from '../services/vehiculoService'
 
 const form = reactive({
   marca: '',
@@ -29,17 +30,14 @@ const form = reactive({
 
 const mensaje = ref('')
 
-const publicar = () => {
-  /*
-    Aquí después irá:
-    await api.post('/vehiculos', form)
-  */
-
-  console.log("Vehículo publicado:", form)
-
-  mensaje.value = "Vehículo publicado correctamente"
-
-  Object.keys(form).forEach(k => form[k] = '')
+const publicar = async () => {
+  try {
+    await crearVehiculo(form)
+    mensaje.value = "Vehículo publicado correctamente"
+    Object.keys(form).forEach(k => form[k] = '')
+  } catch {
+    mensaje.value = "Error al publicar el vehículo"
+  }
 }
 </script>
 

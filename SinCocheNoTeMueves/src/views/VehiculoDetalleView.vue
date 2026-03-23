@@ -26,19 +26,32 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { getVehiculo } from '../services/vehiculoService'
 
 const route = useRoute()
 const mensaje = ref('')
+const cargando = ref(true)
 
 const vehiculo = reactive({
-  id: route.params.id,
-  marca: 'Audi',
-  modelo: 'A4',
-  estado: 'Usado',
-  precio: 15000,
+  id: null,
+  marca: '',
+  modelo: '',
+  estado: '',
+  precio: 0,
   disponible: true
+})
+
+onMounted(async () => {
+  try {
+    const data = await getVehiculo(route.params.id)
+    Object.assign(vehiculo, data)
+  } catch {
+    mensaje.value = 'Error al cargar el vehículo'
+  } finally {
+    cargando.value = false
+  }
 })
 
 /*

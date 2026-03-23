@@ -2,11 +2,15 @@ package com.tfg.backend.controller;
 
 import com.tfg.backend.model.Usuario;
 import com.tfg.backend.repository.UsuarioRepository;
+import com.tfg.backend.security.JwtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -18,12 +22,13 @@ import java.util.Optional;
 public class AuthController {
 
     @Autowired
-
     UsuarioRepository repo;
 
-    @PostMapping("/login")
+    @Autowired
+    JwtService jwtService;
 
-    public Usuario login(@RequestBody Usuario request){
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Usuario request){
 
         Optional<Usuario> usuario=
                 repo.findByEmail(request.getEmail());
@@ -33,13 +38,20 @@ public class AuthController {
             if(usuario.get().getPassword()
                     .equals(request.getPassword())){
 
-                return usuario.get();
+                String token = jwtService.generarToken(
+                        usuario.get().getEmail());
+
+                Map<String, Object> respuesta = new HashMap<>();
+                respuesta.put("token", token);
+                respuesta.put("usuario", usuario.get());
+
+                return ResponseEntity.ok(respuesta);
 
             }
 
         }
 
-        return null;
+        return ResponseEntity.status(401).body("Credenciales incorrectas");
 
     }
 

@@ -118,18 +118,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import api from '../services/api'
 
 const esAdmin = ref(false)
 const busqueda = ref('')
 const acciones = ref([])
 
-const usuarios = ref([
-  { id: 1, nombre: 'Carlos', apellidos: 'Rodríguez', email: 'carlos@email.com', dni: '12345678A', rol: 'user', telefono: '611111111', bloqueado: false },
-  { id: 2, nombre: 'Mario', apellidos: 'Rodríguez', email: 'mario@email.com', dni: '23456789B', rol: 'user', telefono: '622222222', bloqueado: false },
-  { id: 3, nombre: 'Daniel', apellidos: 'Barbero', email: 'daniel@email.com', dni: '34567890C', rol: 'admin', telefono: '633333333', bloqueado: false },
-  { id: 4, nombre: 'Laura', apellidos: 'Martín', email: 'laura@email.com', dni: '45678901D', rol: 'user', telefono: '644444444', bloqueado: false },
-  { id: 5, nombre: 'Pedro', apellidos: 'Sánchez', email: 'pedro@email.com', dni: '56789012E', rol: 'user', telefono: '655555555', bloqueado: true }
-])
+const usuarios = ref([])
 
 const usuariosBloqueados = computed(() =>
   usuarios.value.filter(u => u.bloqueado).length
@@ -146,11 +141,20 @@ const usuariosFiltrados = computed(() => {
   )
 })
 
-onMounted(() => {
+onMounted(async () => {
   const datos = localStorage.getItem('usuario')
   if (datos) {
     const user = JSON.parse(datos)
     esAdmin.value = user.rol === 'admin'
+  }
+
+  if (esAdmin.value) {
+    try {
+      const res = await api.get('/admin/usuarios')
+      usuarios.value = res.data
+    } catch {
+      console.error('Error al cargar usuarios')
+    }
   }
 
   acciones.value = JSON.parse(localStorage.getItem('moderacion')) || []
@@ -174,10 +178,15 @@ const desbloquearUsuario = (u) => {
   registrarAccion('desbloqueo', `Usuario ${u.nombre} ${u.apellidos} (${u.email}) desbloqueado`)
 }
 
-const eliminarUsuario = (u) => {
+const eliminarUsuario = async (u) => {
   if (!confirm(`¿Eliminar permanentemente a ${u.nombre} ${u.apellidos}? Esta acción no se puede deshacer.`)) return
-  registrarAccion('eliminación', `Usuario ${u.nombre} ${u.apellidos} (${u.email}) eliminado`)
-  usuarios.value = usuarios.value.filter(x => x.id !== u.id)
+  try {
+    await api.delete('/admin/usuarios/' + u.id)
+    registrarAccion('eliminación', `Usuario ${u.nombre} ${u.apellidos} (${u.email}) eliminado`)
+    usuarios.value = usuarios.value.filter(x => x.id !== u.id)
+  } catch {
+    alert('Error al eliminar el usuario')
+  }
 }
 </script>
 

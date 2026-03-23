@@ -1,7 +1,7 @@
 body {
-  margin: 0;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  background: #f4f6f9;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e8f0fe;
   display: flex;
   flex-direction: column;
 }

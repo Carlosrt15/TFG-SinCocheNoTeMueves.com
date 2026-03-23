@@ -4,8 +4,6 @@ import com.tfg.backend.model.Usuario;
 
 import com.tfg.backend.repository.UsuarioRepository;
 
-import com.tfg.backend.security.JwtService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;

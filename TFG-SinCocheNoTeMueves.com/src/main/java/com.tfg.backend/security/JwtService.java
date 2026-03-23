@@ -1,7 +1,13 @@
 package com.tfg.backend.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import io.jsonwebtoken.security.Keys;
+
 import org.springframework.stereotype.Service;
+
+import java.security.Key;
 
 import java.util.Date;
 
@@ -9,7 +15,13 @@ import java.util.Date;
 
 public class JwtService {
 
-    private final String SECRET="TFG_SECRET_KEY";
+    private final String SECRET =
+            "TFGProyectoSinCocheNoTeMueves2026JWTClaveSegura";
+
+    private final Key key =
+            Keys.hmacShaKeyFor(
+                    SECRET.getBytes()
+            );
 
     public String generarToken(String email){
 
@@ -17,23 +29,25 @@ public class JwtService {
 
                 .setSubject(email)
 
-                .setIssuedAt(new Date())
+                .setIssuedAt(
+                        new Date()
+                )
 
                 .setExpiration(
 
                         new Date(
 
-                                System.currentTimeMillis()+86400000
-
+                                System.currentTimeMillis()
+                                        +86400000
                         )
 
                 )
 
                 .signWith(
 
-                        SignatureAlgorithm.HS256,
+                        key,
 
-                        SECRET
+                        SignatureAlgorithm.HS256
 
                 )
 
@@ -43,9 +57,11 @@ public class JwtService {
 
     public String extraerEmail(String token){
 
-        return Jwts.parser()
+        return Jwts.parserBuilder()
 
-                .setSigningKey(SECRET)
+                .setSigningKey(key)
+
+                .build()
 
                 .parseClaimsJws(token)
 

@@ -1,56 +1,83 @@
 <template>
-  <div class="registro-wrapper">
-    <div class="registro-card">
-
-      <h2>Crear Cuenta</h2>
-
-     
-      <div v-if="mensajeExito" class="mensaje exito">
-        {{ mensajeExito }}
+  <div class="auth-page auth-page--registro">
+    <div class="auth-left">
+      <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&q=80" alt="Coche de lujo" />
+      <div class="auth-left-overlay">
+        <div class="auth-left-content">
+          <span class="auth-left-badge">🚀 Gratis y sin compromiso</span>
+          <h2>Únete a la comunidad</h2>
+          <p>Más de 18.000 usuarios ya compran y venden con nosotros cada día.</p>
+          <div class="auth-steps">
+            <div class="auth-step"><span>1</span> Crea tu cuenta gratis</div>
+            <div class="auth-step"><span>2</span> Publica o encuentra tu coche</div>
+            <div class="auth-step"><span>3</span> Cierra el trato de forma segura</div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- Mensaje de error -->
-      <div v-if="mensajeError" class="mensaje error">
-        {{ mensajeError }}
-      </div>
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <router-link to="/" class="auth-logo">
+          <span>🚗</span>
+          <span><span style="color:var(--navy-dark)">SinCoche</span><span style="color:var(--primary)">NoTeMueves</span></span>
+        </router-link>
 
-      <form @submit.prevent="registrar">
-
-        <div class="input-group">
-          <input v-model="form.nombre" placeholder="Nombre" required />
-          <input v-model="form.apellidos" placeholder="Apellidos" required />
+        <div class="auth-header">
+          <h1>Crear cuenta</h1>
+          <p>¿Ya tienes cuenta? <router-link to="/login">Inicia sesión</router-link></p>
         </div>
 
-        <input v-model="form.dni" placeholder="DNI" required />
+        <div v-if="mensajeExito" class="alert alert-success">✅ {{ mensajeExito }}</div>
+        <div v-if="mensajeError" class="alert alert-error">⚠️ {{ mensajeError }}</div>
 
-        <input v-model="form.email" type="email" placeholder="Correo electrónico" required />
+        <form @submit.prevent="registrar" class="registro-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <input v-model="form.nombre" class="form-input" placeholder="Juan" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Apellidos</label>
+              <input v-model="form.apellidos" class="form-input" placeholder="García López" required />
+            </div>
+          </div>
 
-        <input v-model="form.telefono" placeholder="Teléfono" required />
+          <div class="form-group">
+            <label class="form-label">DNI</label>
+            <input v-model="form.dni" class="form-input" placeholder="12345678A" required />
+          </div>
 
-        <input 
-          v-model="form.password" 
-          type="password" 
-          placeholder="Contraseña" 
-          required 
-        />
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input v-model="form.email" type="email" class="form-input" placeholder="tu@email.com" required />
+          </div>
 
-        <input 
-          v-model="confirmPassword" 
-          type="password" 
-          placeholder="Confirmar contraseña" 
-          required 
-        />
+          <div class="form-group">
+            <label class="form-label">Teléfono</label>
+            <input v-model="form.telefono" class="form-input" placeholder="600 000 000" required />
+          </div>
 
-        <button type="submit" :disabled="cargando">
-          {{ cargando ? "Registrando..." : "Registrarse" }}
-        </button>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Contraseña</label>
+              <input v-model="form.password" type="password" class="form-input" placeholder="••••••••" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirmar</label>
+              <input v-model="confirmPassword" type="password" class="form-input" placeholder="••••••••" required />
+            </div>
+          </div>
 
-      </form>
+          <button type="submit" class="btn btn-primary btn-full" :disabled="cargando">
+            {{ cargando ? 'Creando cuenta...' : 'Crear cuenta gratis →' }}
+          </button>
+        </form>
 
-      <p class="login-link">
-        ¿Ya tienes cuenta?
-        <router-link to="/login">Inicia sesión</router-link>
-      </p>
+        <p class="auth-legal">
+          Al registrarte aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de privacidad</a>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -59,54 +86,27 @@
 import { reactive, ref } from 'vue'
 import api from '../services/api'
 
-/*
-  Objeto reactivo con los datos del formulario
-*/
-const form = reactive({
-  nombre: '',
-  apellidos: '',
-  dni: '',
-  email: '',
-  telefono: '',
-  password: ''
-})
-
+const form = reactive({ nombre: '', apellidos: '', dni: '', email: '', telefono: '', password: '' })
 const confirmPassword = ref('')
 const mensajeError = ref('')
 const mensajeExito = ref('')
 const cargando = ref(false)
 
-/*
-  Función de registro
-*/
 const registrar = async () => {
-
   mensajeError.value = ''
   mensajeExito.value = ''
-
-
   if (form.password !== confirmPassword.value) {
-    mensajeError.value = "Las contraseñas no coinciden"
+    mensajeError.value = 'Las contraseñas no coinciden'
     return
   }
-
   try {
     cargando.value = true
-
-    /*
-      Cuando backend funcionando,
-      esto enviará los datos al endpoint /registro
-    */
     await api.post('/usuarios/registro', form)
-
-    mensajeExito.value = "Usuario registrado correctamente"
-
-    // Limpiar formulario
+    mensajeExito.value = 'Cuenta creada correctamente. Ya puedes iniciar sesión.'
     Object.keys(form).forEach(key => form[key] = '')
     confirmPassword.value = ''
-
-  } catch (error) {
-    mensajeError.value = "Error al registrar usuario"
+  } catch {
+    mensajeError.value = 'Error al crear la cuenta. Inténtalo de nuevo.'
   } finally {
     cargando.value = false
   }
@@ -114,129 +114,138 @@ const registrar = async () => {
 </script>
 
 <style scoped>
-.registro-wrapper {
-  min-height: 80vh;
+.auth-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - var(--navbar-h));
+}
+
+.auth-left {
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.auth-left-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,50,120,0.88), rgba(0,0,0,0.5));
   display: flex;
-  justify-content: center;
+  align-items: flex-end;
+  padding: 48px;
+}
+
+.auth-left-content { color: white; }
+
+.auth-left-badge {
+  display: inline-flex;
   align-items: center;
-  background: linear-gradient(135deg, #f0f4ff, #e6f0ff);
-  padding: 20px;
+  gap: 8px;
+  background: rgba(0,195,255,0.2);
+  border: 1px solid rgba(0,195,255,0.4);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 16px;
 }
 
-.registro-card {
-  background: white;
-  padding: 40px;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  color: #1a1a2e;
-  font-size: 1.8rem;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group {
-  display: flex;
-  gap: 15px;
-}
-
-.input-group input {
-  flex: 1;
-  min-width: 0;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
-  box-sizing: border-box;
-  transition: 0.3s;
-}
-
-input:focus {
-  border-color: #0077ff;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0,119,255,0.15);
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background: #0077ff;
-  border: 1px solid #0077ff;
+.auth-left-content h2 {
   color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: 0.3s;
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
-button:hover {
-  background: #005edb;
-  border-color: #005edb;
+.auth-left-content > p {
+  color: rgba(255,255,255,0.65);
+  line-height: 1.65;
+  margin-bottom: 28px;
 }
 
-button:disabled {
-  background: #a0a0a0;
-  cursor: not-allowed;
-}
+.auth-steps { display: flex; flex-direction: column; gap: 12px; }
 
-.mensaje {
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  text-align: center;
+.auth-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 0.9rem;
+  color: rgba(255,255,255,0.8);
 }
 
-.exito {
-  background: #d4edda;
-  color: #155724;
+.auth-step span {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.error {
-  background: #f8d7da;
-  color: #721c24;
+.auth-right {
+  background: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  overflow-y: auto;
 }
 
-.login-link {
-  text-align: center;
+.auth-form-wrap {
+  width: 100%;
+  max-width: 440px;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-decoration: none;
+  margin-bottom: 36px;
+}
+
+.auth-header { margin-bottom: 28px; }
+
+.auth-header h1 { font-size: 1.9rem; margin-bottom: 8px; }
+
+.auth-header p { color: var(--text-muted); font-size: 0.92rem; }
+
+.auth-header a { color: var(--primary); font-weight: 600; text-decoration: none; }
+.auth-header a:hover { text-decoration: underline; }
+
+.registro-form { display: flex; flex-direction: column; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.btn-full { width: 100%; padding: 14px; font-size: 1rem; margin-top: 8px; }
+
+.auth-legal {
   margin-top: 20px;
-  color: #666;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  text-align: center;
+  line-height: 1.6;
 }
 
-.login-link a {
-  color: #0077ff;
-  font-weight: bold;
-}
+.auth-legal a { color: var(--primary); }
 
-.login-link a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 600px) {
-  .input-group {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .registro-card {
-    padding: 25px;
-  }
+@media (max-width: 768px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-left { display: none; }
+  .auth-right { padding: 36px 20px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
 }
 </style>

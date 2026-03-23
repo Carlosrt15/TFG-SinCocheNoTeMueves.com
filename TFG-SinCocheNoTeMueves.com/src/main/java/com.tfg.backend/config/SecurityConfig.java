@@ -4,6 +4,7 @@ import com.tfg.backend.security.JwtFilter;
 
 import org.springframework.context.annotation.*;
 
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,6 +27,8 @@ public class SecurityConfig {
             throws Exception{
 
         http
+
+                .cors(Customizer.withDefaults())
 
                 .csrf(csrf->csrf.disable())
 

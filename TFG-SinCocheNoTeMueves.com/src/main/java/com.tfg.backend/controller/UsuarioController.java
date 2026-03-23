@@ -1,13 +1,12 @@
 package com.tfg.backend.controller;
 
 import com.tfg.backend.model.Usuario;
+
 import com.tfg.backend.repository.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 
@@ -23,20 +22,13 @@ public class UsuarioController {
 
     @PostMapping("/registro")
 
-    public Usuario registro(
-            @RequestBody Usuario usuario){
+    public Usuario registrar(
 
-        usuario.setRol("USER");
+            @RequestBody Usuario u){
 
-        return repo.save(usuario);
+        u.setRol("USER");
 
-    }
-
-    @GetMapping
-
-    public List<Usuario> listar(){
-
-        return repo.findAll();
+        return repo.save(u);
 
     }
 

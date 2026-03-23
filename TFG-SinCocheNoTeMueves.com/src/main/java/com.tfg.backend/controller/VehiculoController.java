@@ -29,15 +29,6 @@ public class VehiculoController {
 
     }
 
-    @GetMapping("/{id}")
-
-    public Vehiculo obtener(
-            @PathVariable Long id){
-
-        return repo.findById(id).orElse(null);
-
-    }
-
     @PostMapping
 
     public Vehiculo crear(

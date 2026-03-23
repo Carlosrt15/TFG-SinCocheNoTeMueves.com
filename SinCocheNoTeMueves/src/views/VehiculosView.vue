@@ -5,13 +5,14 @@
     <input v-model="busqueda" placeholder="Buscar..." class="buscador" />
 
     <div class="grid">
-      <VehiculoCard v-for="v in filtrados" :key="v.id" :vehiculo="v" />
+      <div v-for="v in filtrados" :key="v.id">
+        <VehiculoCard :vehiculo="v" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// cambios para usar datos reales del back no de test
 import { ref, computed, onMounted } from "vue";
 
 import VehiculoCard from "../components/VehiculoCard.vue";
@@ -22,15 +23,23 @@ const busqueda = ref("");
 
 const vehiculos = ref([]);
 
+/* CARGAR VEHICULOS */
+
 onMounted(async () => {
   try {
     const res = await api.get("/vehiculos");
 
+    console.log(res.data); // IMPORTANTE DEBUG
+
     vehiculos.value = res.data;
-  } catch {
-    alert("Error cargando vehículos");
+  } catch (error) {
+    console.log(error);
+
+    alert("Error cargando coches");
   }
 });
+
+/* FILTRO */
 
 const filtrados = computed(() => {
   const texto = busqueda.value.toLowerCase();
@@ -47,23 +56,7 @@ const filtrados = computed(() => {
 
 <style scoped>
 .container {
-  padding: 40px 20px;
-}
-
-.buscador {
-  max-width: 400px;
-
-  display: block;
-
-  margin: auto;
-
-  padding: 12px;
-
-  border-radius: 8px;
-
-  border: 1px solid #ccc;
-
-  margin-bottom: 30px;
+  padding: 40px;
 }
 
 .grid {
@@ -71,6 +64,18 @@ const filtrados = computed(() => {
 
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 
-  gap: 30px;
+  gap: 25px;
+}
+
+.buscador {
+  display: block;
+
+  margin: auto;
+
+  padding: 10px;
+
+  width: 300px;
+
+  margin-bottom: 30px;
 }
 </style>

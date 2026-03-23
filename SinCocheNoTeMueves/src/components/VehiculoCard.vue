@@ -1,6 +1,7 @@
 <template>
   <div class="card">
-    <img :src="vehiculo.imagen" alt="coche" />
+    <!--Puede romper el render las imagenes dejar asi de momento-->
+    <img :src="vehiculo.imagen || 'https://via.placeholder.com/300'" alt="coche" />
 
     <div class="info">
       <h3>{{ vehiculo.marca }} {{ vehiculo.modelo }}</h3>

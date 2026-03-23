@@ -1,33 +1,41 @@
 package com.tfg.backend.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.
+        UsernamePasswordAuthenticationToken;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.
+        SecurityContextHolder;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.
+        SimpleGrantedAuthority;
 
 import org.springframework.stereotype.Component;
 
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.filter.
+        OncePerRequestFilter;
+
+import com.tfg.backend.model.Usuario;
+import com.tfg.backend.repository.UsuarioRepository;
 
 import java.io.IOException;
+import java.util.*;
 
 @Component
 
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
+
     JwtService jwtService;
 
     @Autowired
-    CustomUserDetailsService userService;
+
+    UsuarioRepository repo;
 
     @Override
 
@@ -37,49 +45,75 @@ public class JwtFilter extends OncePerRequestFilter {
 
             HttpServletResponse response,
 
-            FilterChain chain)
+            FilterChain filterChain)
 
-            throws ServletException, IOException {
+            throws ServletException,IOException{
 
-        String authHeader =
+        String header=
+
                 request.getHeader("Authorization");
 
-        if(authHeader != null &&
-                authHeader.startsWith("Bearer ")){
+        if(header!=null && header.startsWith("Bearer ")){
 
-            String token =
-                    authHeader.substring(7);
+            String token=
 
-            if(jwtService.validarToken(token)){
+                    header.replace("Bearer ","");
 
-                String email =
-                        jwtService.extraerEmail(token);
+            String email=
 
-                UserDetails user =
-                        userService
-                                .loadUserByUsername(email);
+                    jwtService.extraerEmail(token);
 
-                UsernamePasswordAuthenticationToken auth =
+            Optional<Usuario> usuario=
+
+                    repo.findByEmail(email);
+
+            if(usuario.isPresent()){
+
+                List<SimpleGrantedAuthority>
+
+                        auth=
+
+                        List.of(
+
+                                new SimpleGrantedAuthority(
+
+                                        usuario.get().getRol()
+
+                                )
+
+                        );
+
+                UsernamePasswordAuthenticationToken
+
+                        authentication=
 
                         new UsernamePasswordAuthenticationToken(
 
-                                user,
+                                email,
 
                                 null,
 
-                                user.getAuthorities()
+                                auth
 
                         );
 
                 SecurityContextHolder
+
                         .getContext()
-                        .setAuthentication(auth);
+
+                        .setAuthentication(authentication);
 
             }
 
         }
 
-        chain.doFilter(request,response);
+        filterChain.doFilter(
+
+                request,
+
+                response
+
+        );
 
     }
 

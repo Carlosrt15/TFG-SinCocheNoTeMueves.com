@@ -1,12 +1,7 @@
 package com.tfg.backend.security;
 
 import io.jsonwebtoken.*;
-
-import io.jsonwebtoken.security.Keys;
-
 import org.springframework.stereotype.Service;
-
-import java.security.Key;
 
 import java.util.Date;
 
@@ -14,16 +9,7 @@ import java.util.Date;
 
 public class JwtService {
 
-    private final String SECRET=
-            "sincochenotemuevestfg2025securityjwt";
-
-    private Key key(){
-
-        return Keys.hmacShaKeyFor(
-                SECRET.getBytes()
-        );
-
-    }
+    private final String SECRET="TFG_SECRET_KEY";
 
     public String generarToken(String email){
 
@@ -34,11 +20,22 @@ public class JwtService {
                 .setIssuedAt(new Date())
 
                 .setExpiration(
-                        new Date(System.currentTimeMillis()
-                                + 1000*60*60*10)
+
+                        new Date(
+
+                                System.currentTimeMillis()+86400000
+
+                        )
+
                 )
 
-                .signWith(key())
+                .signWith(
+
+                        SignatureAlgorithm.HS256,
+
+                        SECRET
+
+                )
 
                 .compact();
 
@@ -46,41 +43,15 @@ public class JwtService {
 
     public String extraerEmail(String token){
 
-        return Jwts.parserBuilder()
+        return Jwts.parser()
 
-                .setSigningKey(key())
-
-                .build()
+                .setSigningKey(SECRET)
 
                 .parseClaimsJws(token)
 
                 .getBody()
 
                 .getSubject();
-
-    }
-
-    public boolean validarToken(String token){
-
-        try{
-
-            Jwts.parserBuilder()
-
-                    .setSigningKey(key())
-
-                    .build()
-
-                    .parseClaimsJws(token);
-
-            return true;
-
-        }
-
-        catch(Exception e){
-
-            return false;
-
-        }
 
     }
 

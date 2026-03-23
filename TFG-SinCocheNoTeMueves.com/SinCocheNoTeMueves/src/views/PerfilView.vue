@@ -1,108 +1,132 @@
 <template>
-  <div class="perfil-wrapper">
-
-    <!-- Sin sesión -->
-    <div v-if="!usuario" class="card aviso">
-      <h2>No has iniciado sesión</h2>
-      <p>Inicia sesión para ver tu perfil y estadísticas.</p>
-      <router-link to="/login"><button>Iniciar sesión</button></router-link>
+  <div>
+    <div class="page-header">
+      <div class="container page-header-content">
+        <h1>👤 Mi Perfil</h1>
+        <p>Gestiona tu cuenta y revisa tu historial</p>
+      </div>
     </div>
 
-    <!-- Con sesión -->
-    <template v-else>
+    <div class="container perfil-layout">
 
-      <!-- Cabecera perfil -->
-      <div class="card cabecera">
-        <div class="avatar">{{ iniciales }}</div>
-        <div class="info-usuario">
-          <h2>{{ usuario.nombre }} {{ usuario.apellidos }}</h2>
-          <p class="email">{{ usuario.email }}</p>
-          <p class="rol" :class="usuario.rol">{{ usuario.rol === 'admin' ? 'Administrador' : 'Usuario' }}</p>
-        </div>
-        <button class="btn-logout" @click="cerrarSesion">Cerrar sesión</button>
+      <!-- Sin sesión -->
+      <div v-if="!usuario" class="card-base no-sesion">
+        <div class="no-sesion-icon">🔐</div>
+        <h2>Sesión no iniciada</h2>
+        <p>Inicia sesión para acceder a tu perfil, historial de compras y más.</p>
+        <router-link to="/login" class="btn btn-primary">Iniciar sesión</router-link>
       </div>
 
-      <!-- Estadísticas -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-numero">{{ compras.length }}</span>
-          <span class="stat-label">Compras realizadas</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-numero">{{ favoritos.length }}</span>
-          <span class="stat-label">Vehículos en favoritos</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-numero">{{ totalGastado }}</span>
-          <span class="stat-label">Total gastado</span>
-        </div>
-      </div>
+      <template v-else>
 
-      <!-- Datos personales -->
-      <div class="card">
-        <h3>Datos personales</h3>
+        <!-- Cabecera Perfil -->
+        <div class="card-base perfil-cabecera">
+          <div class="perfil-avatar">{{ iniciales }}</div>
+          <div class="perfil-usuario-info">
+            <h2>{{ usuario.nombre }} {{ usuario.apellidos }}</h2>
+            <p class="perfil-email">{{ usuario.email }}</p>
+            <span class="badge" :class="usuario.rol === 'ADMIN' ? 'badge-gold' : 'badge-blue'">
+              {{ usuario.rol === 'ADMIN' ? '⭐ Administrador' : '👤 Usuario' }}
+            </span>
+          </div>
+          <button class="btn btn-danger btn-logout" @click="cerrarSesion">Cerrar sesión</button>
+        </div>
 
-        <div class="form-grid">
-          <div class="campo">
-            <label>Nombre</label>
-            <input v-model="edicion.nombre" :disabled="!editando" />
+        <!-- Stats -->
+        <div class="perfil-stats">
+          <div class="card-base stat-card animate-up">
+            <div class="stat-icon stat-icon--blue">🛒</div>
+            <div class="stat-info">
+              <span class="stat-num">{{ compras.length }}</span>
+              <span class="stat-label">Compras realizadas</span>
+            </div>
           </div>
-          <div class="campo">
-            <label>Apellidos</label>
-            <input v-model="edicion.apellidos" :disabled="!editando" />
+          <div class="card-base stat-card animate-up animate-up-1">
+            <div class="stat-icon stat-icon--red">♥</div>
+            <div class="stat-info">
+              <span class="stat-num">{{ favoritos.length }}</span>
+              <span class="stat-label">Favoritos guardados</span>
+            </div>
           </div>
-          <div class="campo">
-            <label>DNI</label>
-            <input v-model="edicion.dni" disabled />
-          </div>
-          <div class="campo">
-            <label>Teléfono</label>
-            <input v-model="edicion.telefono" :disabled="!editando" />
-          </div>
-          <div class="campo full">
-            <label>Email</label>
-            <input v-model="edicion.email" disabled />
+          <div class="card-base stat-card animate-up animate-up-2">
+            <div class="stat-icon stat-icon--green">💶</div>
+            <div class="stat-info">
+              <span class="stat-num">{{ totalGastado }}</span>
+              <span class="stat-label">Total invertido</span>
+            </div>
           </div>
         </div>
 
-        <div class="acciones">
-          <button v-if="!editando" @click="editando = true">Editar perfil</button>
-          <template v-else>
-            <button @click="guardarCambios">Guardar</button>
-            <button class="btn-cancelar" @click="cancelarEdicion">Cancelar</button>
-          </template>
+        <!-- Datos Personales -->
+        <div class="card-base perfil-datos">
+          <div class="perfil-section-header">
+            <h3>Datos personales</h3>
+            <button v-if="!editando" class="btn btn-outline btn-sm" @click="editando = true">✏️ Editar</button>
+            <div v-else class="edit-btns">
+              <button class="btn btn-primary btn-sm" @click="guardarCambios">💾 Guardar</button>
+              <button class="btn btn-outline btn-sm" @click="cancelarEdicion">Cancelar</button>
+            </div>
+          </div>
+
+          <div class="datos-grid">
+            <div class="dato-item">
+              <label class="form-label">Nombre</label>
+              <input v-model="edicion.nombre" class="form-input" :disabled="!editando" />
+            </div>
+            <div class="dato-item">
+              <label class="form-label">Apellidos</label>
+              <input v-model="edicion.apellidos" class="form-input" :disabled="!editando" />
+            </div>
+            <div class="dato-item">
+              <label class="form-label">DNI</label>
+              <input v-model="edicion.dni" class="form-input" disabled />
+            </div>
+            <div class="dato-item">
+              <label class="form-label">Teléfono</label>
+              <input v-model="edicion.telefono" class="form-input" :disabled="!editando" />
+            </div>
+            <div class="dato-item dato-full">
+              <label class="form-label">Email</label>
+              <input v-model="edicion.email" class="form-input" disabled />
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Historial de compras -->
-      <div class="card">
-        <h3>Historial de compras</h3>
+        <!-- Historial Compras -->
+        <div class="card-base historial">
+          <h3>Historial de compras</h3>
 
-        <div v-if="compras.length === 0" class="vacio">
-          <p>Aún no has realizado ninguna compra.</p>
+          <div v-if="compras.length === 0" class="empty-state" style="padding: 40px 0">
+            <div class="empty-state-icon">🛒</div>
+            <h3>Aún no has comprado</h3>
+            <p>Explora el catálogo y encuentra tu próximo vehículo</p>
+            <router-link to="/vehiculos" class="btn btn-primary" style="margin-top:14px">Ver catálogo</router-link>
+          </div>
+
+          <div v-else class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vehículo</th>
+                  <th>Precio</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="c in compras" :key="c.id">
+                  <td><strong>{{ c.marca }} {{ c.modelo }}</strong></td>
+                  <td class="precio-cell">{{ c.precio?.toLocaleString('es-ES') }} €</td>
+                  <td>{{ c.fecha }}</td>
+                  <td><span class="badge badge-green">✅ Completada</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div v-else class="tabla-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Vehículo</th>
-                <th>Precio</th>
-                <th>Fecha</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="c in compras" :key="c.id">
-                <td>{{ c.marca }} {{ c.modelo }}</td>
-                <td>{{ c.precio.toLocaleString() }} €</td>
-                <td>{{ c.fecha }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </template>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -116,39 +140,24 @@ const compras = ref([])
 const favoritos = ref([])
 const editando = ref(false)
 
-const edicion = reactive({
-  nombre: '',
-  apellidos: '',
-  dni: '',
-  telefono: '',
-  email: ''
-})
+const edicion = reactive({ nombre: '', apellidos: '', dni: '', telefono: '', email: '' })
 
 const iniciales = computed(() => {
   if (!usuario.value) return ''
-  const n = usuario.value.nombre?.[0] || ''
-  const a = usuario.value.apellidos?.[0] || ''
-  return (n + a).toUpperCase()
+  return ((usuario.value.nombre?.[0] || '') + (usuario.value.apellidos?.[0] || '')).toUpperCase()
 })
 
 const totalGastado = computed(() => {
   const total = compras.value.reduce((sum, c) => sum + (c.precio || 0), 0)
-  return total.toLocaleString() + ' €'
+  return total.toLocaleString('es-ES') + ' €'
 })
 
 onMounted(() => {
   const datos = localStorage.getItem('usuario')
   if (datos) {
     usuario.value = JSON.parse(datos)
-    Object.assign(edicion, {
-      nombre: usuario.value.nombre || '',
-      apellidos: usuario.value.apellidos || '',
-      dni: usuario.value.dni || '',
-      telefono: usuario.value.telefono || '',
-      email: usuario.value.email || ''
-    })
+    Object.assign(edicion, { nombre: usuario.value.nombre || '', apellidos: usuario.value.apellidos || '', dni: usuario.value.dni || '', telefono: usuario.value.telefono || '', email: usuario.value.email || '' })
   }
-
   compras.value = JSON.parse(localStorage.getItem('compras')) || []
   favoritos.value = JSON.parse(localStorage.getItem('favoritos')) || []
 })
@@ -177,221 +186,136 @@ const cerrarSesion = () => {
 </script>
 
 <style scoped>
-.perfil-wrapper {
-  max-width: 900px;
+.perfil-layout {
+  max-width: 960px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 16px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  margin-bottom: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
-}
-
-.aviso {
+.no-sesion {
   text-align: center;
-  padding: 60px 30px;
+  padding: 72px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
-.aviso p {
-  color: #666;
-  margin-bottom: 20px;
-}
+.no-sesion-icon { font-size: 3rem; }
+.no-sesion h2 { margin: 0; }
+.no-sesion p { color: var(--text-muted); margin: 0; }
 
 /* Cabecera */
-.cabecera {
+.perfil-cabecera {
+  padding: 32px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
 }
 
-.avatar {
-  width: 70px;
-  height: 70px;
+.perfil-avatar {
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0077ff, #00c3ff);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: white;
-  font-size: 26px;
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: var(--shadow-blue);
 }
 
-.info-usuario {
-  flex: 1;
-}
+.perfil-usuario-info { flex: 1; }
+.perfil-usuario-info h2 { margin-bottom: 4px; font-size: 1.4rem; }
+.perfil-email { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
 
-.info-usuario h2 {
-  margin: 0;
-  text-align: left;
-}
+.btn-logout { flex-shrink: 0; }
 
-.email {
-  color: #666;
-  margin: 4px 0 0;
-}
-
-.rol {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 3px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.rol.admin {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.rol.user {
-  background: #d1ecf1;
-  color: #0c5460;
-}
-
-.btn-logout {
-  background: #e74c3c;
-  flex-shrink: 0;
-}
-
-.btn-logout:hover {
-  background: #c0392b;
-}
-
-/* Estadísticas */
-.stats-grid {
+/* Stats */
+.perfil-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin-bottom: 25px;
 }
 
 .stat-card {
-  background: white;
-  border-radius: 14px;
-  padding: 25px;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  padding: 28px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-.stat-numero {
-  display: block;
-  font-size: 32px;
-  font-weight: 700;
-  color: #0077ff;
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
-.stat-label {
-  display: block;
-  margin-top: 6px;
-  color: #888;
-  font-size: 14px;
+.stat-icon--blue  { background: rgba(0,119,255,0.1); }
+.stat-icon--red   { background: rgba(239,68,68,0.1); }
+.stat-icon--green { background: rgba(16,185,129,0.1); }
+
+.stat-info { display: flex; flex-direction: column; gap: 3px; }
+
+.stat-num {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
 }
 
-/* Formulario datos */
-h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
+.stat-label { font-size: 0.82rem; color: var(--text-muted); }
+
+/* Datos */
+.perfil-datos { padding: 32px; }
+
+.perfil-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
 }
 
-.form-grid {
+.perfil-section-header h3 { font-size: 1.05rem; }
+
+.edit-btns { display: flex; gap: 8px; }
+
+.datos-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 16px;
 }
 
-.campo label {
-  display: block;
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 5px;
-  font-weight: 600;
-}
+.dato-item { display: flex; flex-direction: column; gap: 6px; }
+.dato-full { grid-column: 1 / -1; }
 
-.campo input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 0;
-}
+/* Historial */
+.historial { padding: 32px; }
+.historial h3 { font-size: 1.05rem; margin-bottom: 24px; }
 
-.campo input:disabled {
-  background: #f8f9fa;
-  color: #666;
-}
+.precio-cell { font-weight: 700; color: var(--primary); }
 
-.campo.full {
-  grid-column: 1 / -1;
-}
+.btn-sm { padding: 8px 16px; font-size: 0.85rem; }
 
-.acciones {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-}
-
-.btn-cancelar {
-  background: #6c757d;
-}
-
-.btn-cancelar:hover {
-  background: #5a6268;
-}
-
-/* Tabla historial */
-.tabla-wrapper {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  text-align: left;
-  padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-}
-
-th {
-  background: #f8f9fa;
-  font-size: 13px;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.vacio {
-  text-align: center;
-  color: #999;
-  padding: 20px;
-}
-
-@media (max-width: 600px) {
-  .cabecera {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .info-usuario h2 {
-    text-align: center;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 768px) {
+  .perfil-stats { grid-template-columns: 1fr; }
+  .datos-grid { grid-template-columns: 1fr; }
+  .dato-full { grid-column: 1; }
+  .perfil-cabecera { flex-direction: column; text-align: center; }
+  .btn-logout { width: 100%; }
 }
 </style>

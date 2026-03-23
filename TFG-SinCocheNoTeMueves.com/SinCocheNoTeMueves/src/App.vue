@@ -6,7 +6,6 @@
     </main>
     <Footer />
   </div>
-  <p>test1</p>
 </template>
 
 <script setup>
@@ -20,7 +19,6 @@ import Footer from './components/Footer.vue'
   flex-direction: column;
   min-height: 100vh;
 }
-
 .main-content {
   flex: 1;
 }

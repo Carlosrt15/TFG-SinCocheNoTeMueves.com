@@ -139,6 +139,11 @@ h2 {
   font-size: 1.8rem;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+}
+
 .input-group {
   display: flex;
   gap: 15px;
@@ -156,6 +161,7 @@ input {
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 0.95rem;
+  box-sizing: border-box;
   transition: 0.3s;
 }
 
@@ -167,19 +173,21 @@ input:focus {
 
 button {
   width: 100%;
-  padding: 13px;
+  padding: 12px;
   background: #0077ff;
-  border: none;
+  border: 1px solid #0077ff;
   color: white;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   font-size: 1rem;
+  box-sizing: border-box;
   transition: 0.3s;
 }
 
 button:hover {
   background: #005edb;
+  border-color: #005edb;
 }
 
 button:disabled {

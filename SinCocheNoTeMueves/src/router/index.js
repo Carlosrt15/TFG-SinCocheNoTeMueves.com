@@ -1,13 +1,18 @@
-import { createRouter, createWebHistory }
-
-  from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '../views/HomeView.vue'
 import Login from '../views/LoginView.vue'
 import Registro from '../views/RegistroView.vue'
 import Vehiculos from '../views/VehiculosView.vue'
+import VehiculoDetalle from '../views/VehiculoDetalleView.vue'
+import Favoritos from '../views/FavoritosView.vue'
 import Perfil from '../views/PerfilView.vue'
+import Contacto from '../views/ContactoView.vue'
+import Chat from '../views/ChatView.vue'
 import Admin from '../views/AdminView.vue'
+import PublicarVehiculo from '../views/PublicarVehiculoView.vue'
+import EditarVehiculo from '../views/EditarVehiculoView.vue'
+import ConfirmarCompra from '../views/ConfirmarCompraView.vue'
 
 const routes = [
 
@@ -19,59 +24,70 @@ const routes = [
 
   { path: '/vehiculos', component: Vehiculos },
 
+  { path: '/vehiculo/:id', component: VehiculoDetalle },
+
+  { path: '/favoritos', component: Favoritos },
+
   { path: '/perfil', component: Perfil },
 
-  { path: '/admin', component: Admin }
+  { path: '/contacto', component: Contacto },
+
+  { path: '/chat', component: Chat },
+
+  { path: '/admin', component: Admin },
+
+  { path: '/publicar', component: PublicarVehiculo },
+
+  { path: '/editar/:id', component: EditarVehiculo },
+
+  { path: '/comprar/:id', component: ConfirmarCompra }
 
 ]
 
-const router =
+const router = createRouter({
 
-  createRouter({
+  history: createWebHistory(),
 
-    history:
+  routes
 
-      createWebHistory(),
+})
 
-    routes
+/* PROTECCION JWT */
 
-  })
-
-router.beforeEach((to) => {
+router.beforeEach((to, from, next) => {
 
   const token =
-
     localStorage.getItem("token")
 
-  const user =
+  const rutasProtegidas = [
 
-    JSON.parse(
+    "/perfil",
 
-      localStorage.getItem("usuario")
+    "/favoritos",
 
-    )
+    "/chat",
+
+    "/publicar",
+
+    "/admin"
+
+  ]
 
   if (
 
-    to.path == "/perfil"
+    rutasProtegidas.includes(to.path)
 
     && !token
 
   ) {
 
-    return "/login"
+    next("/login")
 
   }
 
-  if (
+  else {
 
-    to.path == "/admin"
-
-    && user?.rol != "ADMIN"
-
-  ) {
-
-    return "/"
+    next()
 
   }
 

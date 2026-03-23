@@ -1,118 +1,133 @@
 <template>
-  <div class="admin-wrapper">
-
-    <!-- Sin permisos -->
-    <div v-if="!esAdmin" class="card aviso">
-      <h2>Acceso denegado</h2>
-      <p>Solo los administradores pueden acceder a este panel.</p>
-      <router-link to="/"><button>Volver al inicio</button></router-link>
+  <div>
+    <div class="page-header">
+      <div class="container page-header-content">
+        <h1>⚙️ Panel de Administración</h1>
+        <p>Gestión completa de la plataforma</p>
+      </div>
     </div>
 
-    <!-- Panel admin -->
-    <template v-else>
+    <div class="container admin-layout">
 
-      <h2>Panel de Administración</h2>
-
-      <!-- Resumen -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-numero">{{ usuarios.length }}</span>
-          <span class="stat-label">Usuarios registrados</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-numero">{{ usuariosBloqueados }}</span>
-          <span class="stat-label">Usuarios bloqueados</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-numero">{{ acciones.length }}</span>
-          <span class="stat-label">Acciones de moderación</span>
-        </div>
+      <!-- Acceso denegado -->
+      <div v-if="!esAdmin" class="card-base acceso-denegado">
+        <div class="acceso-icon">🔒</div>
+        <h2>Acceso restringido</h2>
+        <p>Esta sección es exclusiva para administradores de la plataforma.</p>
+        <router-link to="/" class="btn btn-primary">Volver al inicio</router-link>
       </div>
 
-      <!-- Listado usuarios -->
-      <div class="card">
-        <h3>Gestión de usuarios</h3>
+      <template v-else>
 
-        <input
-          v-model="busqueda"
-          placeholder="Buscar por nombre, email o DNI..."
-          class="buscador"
-        />
-
-        <div class="tabla-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>DNI</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="u in usuariosFiltrados" :key="u.id" :class="{ bloqueado: u.bloqueado }">
-                <td>{{ u.nombre }} {{ u.apellidos }}</td>
-                <td>{{ u.email }}</td>
-                <td>{{ u.dni }}</td>
-                <td>
-                  <span class="badge" :class="u.rol">{{ u.rol }}</span>
-                </td>
-                <td>
-                  <span class="estado" :class="u.bloqueado ? 'inactivo' : 'activo'">
-                    {{ u.bloqueado ? 'Bloqueado' : 'Activo' }}
-                  </span>
-                </td>
-                <td>
-                  <div class="btn-group">
-                    <button
-                      v-if="!u.bloqueado && u.rol !== 'admin'"
-                      class="btn-bloquear"
-                      @click="bloquearUsuario(u)"
-                    >
-                      Bloquear
-                    </button>
-                    <button
-                      v-if="u.bloqueado"
-                      class="btn-desbloquear"
-                      @click="desbloquearUsuario(u)"
-                    >
-                      Desbloquear
-                    </button>
-                    <button
-                      v-if="u.rol !== 'admin'"
-                      class="btn-eliminar"
-                      @click="eliminarUsuario(u)"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Registro de acciones -->
-      <div class="card">
-        <h3>Registro de moderación</h3>
-
-        <div v-if="acciones.length === 0" class="vacio">
-          <p>No hay acciones de moderación registradas.</p>
-        </div>
-
-        <div v-else class="lista-acciones">
-          <div v-for="(a, i) in acciones" :key="i" class="accion-item">
-            <span class="accion-tipo" :class="a.tipo">{{ a.tipo }}</span>
-            <span class="accion-texto">{{ a.descripcion }}</span>
-            <span class="accion-fecha">{{ a.fecha }}</span>
+        <!-- Stats -->
+        <div class="admin-stats">
+          <div class="card-base admin-stat animate-up">
+            <div class="astat-icon astat-blue">👥</div>
+            <div>
+              <span class="astat-num">{{ usuarios.length }}</span>
+              <span class="astat-label">Usuarios</span>
+            </div>
+          </div>
+          <div class="card-base admin-stat animate-up animate-up-1">
+            <div class="astat-icon astat-red">🚫</div>
+            <div>
+              <span class="astat-num">{{ usuariosBloqueados }}</span>
+              <span class="astat-label">Bloqueados</span>
+            </div>
+          </div>
+          <div class="card-base admin-stat animate-up animate-up-2">
+            <div class="astat-icon astat-orange">📋</div>
+            <div>
+              <span class="astat-num">{{ acciones.length }}</span>
+              <span class="astat-label">Acciones</span>
+            </div>
+          </div>
+          <div class="card-base admin-stat animate-up animate-up-3">
+            <div class="astat-icon astat-green">✅</div>
+            <div>
+              <span class="astat-num">{{ usuarios.length - usuariosBloqueados }}</span>
+              <span class="astat-label">Activos</span>
+            </div>
           </div>
         </div>
-      </div>
 
-    </template>
+        <!-- Gestión Usuarios -->
+        <div class="card-base admin-card">
+          <div class="admin-card-header">
+            <h3>👥 Gestión de usuarios</h3>
+            <div class="admin-search-wrap">
+              <input v-model="busqueda" class="form-input admin-search" placeholder="Buscar por nombre, email o DNI..." />
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Email</th>
+                  <th>DNI</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="u in usuariosFiltrados" :key="u.id" :class="{ 'fila-bloqueada': u.bloqueado }">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-mini-avatar">{{ (u.nombre[0] || '') + (u.apellidos[0] || '') }}</div>
+                      <span>{{ u.nombre }} {{ u.apellidos }}</span>
+                    </div>
+                  </td>
+                  <td>{{ u.email }}</td>
+                  <td>{{ u.dni }}</td>
+                  <td>
+                    <span class="badge" :class="u.rol === 'admin' ? 'badge-gold' : 'badge-blue'">
+                      {{ u.rol === 'admin' ? '⭐ Admin' : '👤 User' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge" :class="u.bloqueado ? 'badge-red' : 'badge-green'">
+                      {{ u.bloqueado ? '🚫 Bloqueado' : '✅ Activo' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="action-btns">
+                      <button v-if="!u.bloqueado && u.rol !== 'admin'" class="btn-action btn-warn" @click="bloquearUsuario(u)">Bloquear</button>
+                      <button v-if="u.bloqueado" class="btn-action btn-success" @click="desbloquearUsuario(u)">Desbloquear</button>
+                      <button v-if="u.rol !== 'admin'" class="btn-action btn-danger" @click="eliminarUsuario(u)">Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Log Moderación -->
+        <div class="card-base admin-card">
+          <h3>📋 Registro de moderación</h3>
+
+          <div v-if="acciones.length === 0" class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <h3>Sin acciones registradas</h3>
+            <p>Las acciones de moderación aparecerán aquí</p>
+          </div>
+
+          <div v-else class="acciones-log">
+            <div v-for="(a, i) in acciones" :key="i" class="log-item">
+              <span class="log-tipo badge" :class="a.tipo === 'bloqueo' ? 'badge-gold' : a.tipo === 'desbloqueo' ? 'badge-green' : 'badge-red'">
+                {{ a.tipo }}
+              </span>
+              <span class="log-desc">{{ a.descripcion }}</span>
+              <span class="log-fecha">{{ a.fecha }}</span>
+            </div>
+          </div>
+        </div>
+
+      </template>
+    </div>
   </div>
 </template>
 
@@ -123,45 +138,30 @@ import api from '../services/api'
 const esAdmin = ref(false)
 const busqueda = ref('')
 const acciones = ref([])
-
 const usuarios = ref([])
 
-const usuariosBloqueados = computed(() =>
-  usuarios.value.filter(u => u.bloqueado).length
-)
+const usuariosBloqueados = computed(() => usuarios.value.filter(u => u.bloqueado).length)
 
 const usuariosFiltrados = computed(() => {
   const texto = busqueda.value.trim().toLowerCase()
   if (!texto) return usuarios.value
   return usuarios.value.filter(u =>
-    u.nombre.toLowerCase().includes(texto) ||
-    u.apellidos.toLowerCase().includes(texto) ||
-    u.email.toLowerCase().includes(texto) ||
-    u.dni.toLowerCase().includes(texto)
+    u.nombre.toLowerCase().includes(texto) || u.apellidos.toLowerCase().includes(texto) ||
+    u.email.toLowerCase().includes(texto) || u.dni.toLowerCase().includes(texto)
   )
 })
 
 onMounted(async () => {
   const datos = localStorage.getItem('usuario')
-  if (datos) {
-    const user = JSON.parse(datos)
-    esAdmin.value = user.rol === 'admin'
-  }
-
+  if (datos) { const user = JSON.parse(datos); esAdmin.value = user.rol === 'admin' }
   if (esAdmin.value) {
-    try {
-      const res = await api.get('/admin/usuarios')
-      usuarios.value = res.data
-    } catch {
-      console.error('Error al cargar usuarios')
-    }
+    try { const res = await api.get('/admin/usuarios'); usuarios.value = res.data }
+    catch { console.error('Error al cargar usuarios') }
   }
-
   acciones.value = JSON.parse(localStorage.getItem('moderacion')) || []
 })
 
 const ahora = () => new Date().toLocaleString('es-ES')
-
 const registrarAccion = (tipo, descripcion) => {
   acciones.value.unshift({ tipo, descripcion, fecha: ahora() })
   localStorage.setItem('moderacion', JSON.stringify(acciones.value))
@@ -170,265 +170,173 @@ const registrarAccion = (tipo, descripcion) => {
 const bloquearUsuario = (u) => {
   if (!confirm(`¿Bloquear a ${u.nombre} ${u.apellidos}?`)) return
   u.bloqueado = true
-  registrarAccion('bloqueo', `Usuario ${u.nombre} ${u.apellidos} (${u.email}) bloqueado`)
+  registrarAccion('bloqueo', `${u.nombre} ${u.apellidos} (${u.email}) bloqueado`)
 }
 
 const desbloquearUsuario = (u) => {
   u.bloqueado = false
-  registrarAccion('desbloqueo', `Usuario ${u.nombre} ${u.apellidos} (${u.email}) desbloqueado`)
+  registrarAccion('desbloqueo', `${u.nombre} ${u.apellidos} (${u.email}) desbloqueado`)
 }
 
 const eliminarUsuario = async (u) => {
-  if (!confirm(`¿Eliminar permanentemente a ${u.nombre} ${u.apellidos}? Esta acción no se puede deshacer.`)) return
+  if (!confirm(`¿Eliminar permanentemente a ${u.nombre} ${u.apellidos}?`)) return
   try {
     await api.delete('/admin/usuarios/' + u.id)
-    registrarAccion('eliminación', `Usuario ${u.nombre} ${u.apellidos} (${u.email}) eliminado`)
+    registrarAccion('eliminación', `${u.nombre} ${u.apellidos} (${u.email}) eliminado`)
     usuarios.value = usuarios.value.filter(x => x.id !== u.id)
-  } catch {
-    alert('Error al eliminar el usuario')
-  }
+  } catch { alert('Error al eliminar') }
 }
 </script>
 
 <style scoped>
-.admin-wrapper {
+.admin-layout {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 20px;
-}
-
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  margin-bottom: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
-}
-
-.aviso {
-  text-align: center;
-  padding: 60px 30px;
-}
-
-.aviso p {
-  color: #666;
-  margin-bottom: 20px;
-}
-
-/* Stats */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 25px;
-}
-
-.stat-card {
-  background: white;
-  border-radius: 14px;
-  padding: 25px;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-}
-
-.stat-numero {
-  display: block;
-  font-size: 32px;
-  font-weight: 700;
-  color: #0077ff;
-}
-
-.stat-label {
-  display: block;
-  margin-top: 6px;
-  color: #888;
-  font-size: 14px;
-}
-
-/* Buscador */
-.buscador {
-  width: 100%;
-  max-width: 400px;
-  padding: 10px 14px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-/* Tabla */
-h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-.tabla-wrapper {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  text-align: left;
-  padding: 12px 14px;
-  border-bottom: 1px solid #eee;
-  white-space: nowrap;
-}
-
-th {
-  background: #f8f9fa;
-  font-size: 13px;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-tr.bloqueado {
-  opacity: 0.55;
-}
-
-.badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.badge.admin {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.badge.user {
-  background: #d1ecf1;
-  color: #0c5460;
-}
-
-.estado {
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.estado.activo {
-  color: #28a745;
-}
-
-.estado.inactivo {
-  color: #dc3545;
-}
-
-/* Botones acción */
-.btn-group {
-  display: flex;
-  gap: 6px;
-}
-
-.btn-bloquear {
-  background: #ffc107;
-  color: #333;
-  font-size: 12px;
-  padding: 6px 10px;
-}
-
-.btn-bloquear:hover {
-  background: #e0a800;
-}
-
-.btn-desbloquear {
-  background: #28a745;
-  font-size: 12px;
-  padding: 6px 10px;
-}
-
-.btn-desbloquear:hover {
-  background: #218838;
-}
-
-.btn-eliminar {
-  background: #dc3545;
-  font-size: 12px;
-  padding: 6px 10px;
-}
-
-.btn-eliminar:hover {
-  background: #c82333;
-}
-
-/* Registro acciones */
-.lista-acciones {
+  padding: 40px 16px 80px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 24px;
 }
 
-.accion-item {
+.acceso-denegado {
+  text-align: center;
+  padding: 72px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.acceso-icon { font-size: 3rem; }
+.acceso-denegado h2 { margin: 0; }
+.acceso-denegado p { color: var(--text-muted); margin: 0; }
+
+/* Stats */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.admin-stat {
+  padding: 24px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  gap: 16px;
+}
+
+.astat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.astat-blue   { background: rgba(0,119,255,0.1); }
+.astat-red    { background: rgba(239,68,68,0.1); }
+.astat-orange { background: rgba(245,158,11,0.1); }
+.astat-green  { background: rgba(16,185,129,0.1); }
+
+.astat-num {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.astat-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* Cards */
+.admin-card { padding: 32px; }
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-card-header h3 { font-size: 1.05rem; }
+
+.admin-search { max-width: 300px; }
+
+/* Tabla */
+.user-cell { display: flex; align-items: center; gap: 10px; }
+
+.user-mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fila-bloqueada td { opacity: 0.5; }
+
+.action-btns { display: flex; gap: 6px; }
+
+.btn-action {
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-warn { background: var(--warning-bg); color: #92400e; }
+.btn-warn:hover { background: var(--warning); color: white; }
+
+.btn-success { background: var(--success-bg); color: #065f46; }
+.btn-success:hover { background: var(--success); color: white; }
+
+.btn-danger { background: var(--danger-bg); color: #991b1b; }
+.btn-danger:hover { background: var(--danger); color: white; }
+
+/* Acciones log */
+.acciones-log { display: flex; flex-direction: column; gap: 8px; }
+
+.log-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: var(--bg-alt);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
   flex-wrap: wrap;
 }
 
-.accion-tipo {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: capitalize;
-  flex-shrink: 0;
+.log-desc { flex: 1; font-size: 0.88rem; color: var(--text); }
+.log-fecha { font-size: 0.75rem; color: var(--text-light); flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .admin-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
-.accion-tipo.bloqueo {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.accion-tipo.desbloqueo {
-  background: #d4edda;
-  color: #155724;
-}
-
-.accion-tipo.eliminación {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.accion-texto {
-  flex: 1;
-  font-size: 14px;
-  color: #333;
-}
-
-.accion-fecha {
-  font-size: 12px;
-  color: #999;
-  flex-shrink: 0;
-}
-
-.vacio {
-  text-align: center;
-  color: #999;
-  padding: 20px;
-}
-
-@media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .btn-group {
-    flex-direction: column;
-  }
-
-  .accion-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+@media (max-width: 600px) {
+  .admin-stats { grid-template-columns: 1fr; }
+  .admin-card-header { flex-direction: column; align-items: flex-start; }
+  .admin-search { max-width: 100%; width: 100%; }
 }
 </style>

@@ -64,7 +64,7 @@ Se utiliza un sistema de ramas para el desarrollo:
 
 - `main` → versión estable del proyecto  
 - `feature/*` → nuevas funcionalidades  
-- `fix/*` → corrección de errores  
+  
 
 Cada funcionalidad se desarrolla en su propia rama y se integra mediante Pull Request.
 

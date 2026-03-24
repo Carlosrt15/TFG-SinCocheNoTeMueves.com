@@ -60,7 +60,7 @@
         <div class="footer-bottom-links">
           <router-link to="/politica-privacidad">Política de privacidad</router-link>
           <router-link to="/terminos-servicio">Términos de uso</router-link>
-          <router-link to="/contacto">Cookies</router-link>
+          <router-link to="/politica-cookies">Cookies</router-link>
         </div>
       </div>
     </div>

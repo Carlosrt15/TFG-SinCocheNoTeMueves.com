@@ -58,8 +58,8 @@
       <div class="container footer-bottom-inner">
         <p>© 2026 SinCocheNoTeMueves — Proyecto DAW</p>
         <div class="footer-bottom-links">
-          <router-link to="/contacto">Política de privacidad</router-link>
-          <router-link to="/contacto">Términos de uso</router-link>
+          <router-link to="/politica-privacidad">Política de privacidad</router-link>
+          <router-link to="/terminos-servicio">Términos de uso</router-link>
           <router-link to="/contacto">Cookies</router-link>
         </div>
       </div>

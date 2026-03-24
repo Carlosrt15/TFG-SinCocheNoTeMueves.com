@@ -75,7 +75,8 @@
         </form>
 
         <p class="auth-legal">
-          Al registrarte aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de privacidad</a>
+          Al registrarte aceptas nuestros <a href="#">Términos de servicio</a> y
+          <router-link to="/politica-privacidad">Política de datos y privacidad</router-link>
         </p>
       </div>
     </div>

@@ -13,6 +13,7 @@ import Admin from '../views/AdminView.vue'
 import PublicarVehiculo from '../views/PublicarVehiculoView.vue'
 import EditarVehiculo from '../views/EditarVehiculoView.vue'
 import ConfirmarCompra from '../views/ConfirmarCompraView.vue'
+import PoliticaPrivacidad from '../views/PoliticaPrivacidadView.vue'
 
 const routes = [
 
@@ -40,7 +41,9 @@ const routes = [
 
   { path: '/editar/:id', component: EditarVehiculo },
 
-  { path: '/comprar/:id', component: ConfirmarCompra }
+  { path: '/comprar/:id', component: ConfirmarCompra },
+
+  { path: '/politica-privacidad', component: PoliticaPrivacidad }
 
 ]
 

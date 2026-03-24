@@ -14,6 +14,7 @@ import PublicarVehiculo from '../views/PublicarVehiculoView.vue'
 import EditarVehiculo from '../views/EditarVehiculoView.vue'
 import ConfirmarCompra from '../views/ConfirmarCompraView.vue'
 import PoliticaPrivacidad from '../views/PoliticaPrivacidadView.vue'
+import TerminosServicio from '../views/TerminosServicioView.vue'
 
 const routes = [
 
@@ -43,7 +44,9 @@ const routes = [
 
   { path: '/comprar/:id', component: ConfirmarCompra },
 
-  { path: '/politica-privacidad', component: PoliticaPrivacidad }
+  { path: '/politica-privacidad', component: PoliticaPrivacidad },
+
+  { path: '/terminos-servicio', component: TerminosServicio }
 
 ]
 

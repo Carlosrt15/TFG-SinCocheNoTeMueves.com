@@ -14,7 +14,7 @@
           </p>
           <div class="footer-social">
             <a href="#" class="social-btn" aria-label="Instagram">📸</a>
-            <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="X">🐦</a>
             <a href="#" class="social-btn" aria-label="LinkedIn">💼</a>
           </div>
         </div>

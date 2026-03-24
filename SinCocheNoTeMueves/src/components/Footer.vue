@@ -13,7 +13,7 @@
             El marketplace de vehículos más completo de España. Compra, vende y alquila con total seguridad.
           </p>
           <div class="footer-social">
-            <a href="#" class="social-btn" aria-label="Instagram">📸</a>
+            <a href="https://www.instagram.com/sincochenotemueves" class="social-btn" aria-label="Instagram">📸</a>
             <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="X">🐦</a>
             <a href="#" class="social-btn" aria-label="LinkedIn">💼</a>
           </div>

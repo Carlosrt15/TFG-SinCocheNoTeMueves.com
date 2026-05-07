@@ -83,11 +83,33 @@ button, input, textarea, select {
 /* =============================================
    SCROLLBAR
    ============================================= */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--border-light); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track {
+  background: var(--border-light);
+}
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
   border-radius: var(--radius-pill);
+  border: 2px solid var(--border-light);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Accesibilidad: foco visible en navegación con teclado */
+:focus-visible {
+  outline: 3px solid rgba(0,119,255,0.4);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+button:focus-visible, .btn:focus-visible {
+  outline-offset: 3px;
+}
+
+/* Selección de texto con color de marca */
+::selection {
+  background: rgba(0,119,255,0.2);
+  color: var(--navy-dark);
 }
 
 /* =============================================
@@ -226,6 +248,12 @@ h1, h2, h3, h4, h5 {
   font-size: 0.97rem;
 }
 
+.form-input:hover:not(:disabled):not(:focus),
+.form-textarea:hover:not(:disabled):not(:focus),
+.form-select:hover:not(:disabled):not(:focus) {
+  border-color: var(--text-light);
+}
+
 .form-input:focus,
 .form-textarea:focus,
 .form-select:focus {
@@ -289,7 +317,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .badge-blue    { background: rgba(0,119,255,0.12); color: var(--primary); }
-.badge-gold    { background: rgba(245,158,11,0.15); color: #92400e; }
+.badge-gold    { background: rgba(245,158,11,0.18); color: #78350f; }
 .badge-green   { background: rgba(16,185,129,0.12); color: #065f46; }
 .badge-red     { background: rgba(239,68,68,0.12);  color: #991b1b; }
 .badge-gray    { background: var(--bg-alt); color: var(--text-muted); }
@@ -428,4 +456,14 @@ tr:hover td { background: var(--bg-alt); }
 @media (max-width: 768px) {
   .section { padding: 56px 0; }
   .hide-mobile { display: none !important; }
+}
+
+/* Accesibilidad: respetar preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

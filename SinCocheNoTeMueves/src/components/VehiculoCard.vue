@@ -39,17 +39,35 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 import api from '../services/api'
 
-const props = defineProps(['vehiculo'])
+const props = defineProps({
+  vehiculo: { type: Object, required: true }
+})
+
+const guardarEnLocalStorage = (v) => {
+  // Sincroniza también con la lista local que lee FavoritosView.vue
+  const favoritos = JSON.parse(localStorage.getItem('favoritos') || '[]')
+  if (!favoritos.find(f => f.id === v.id)) {
+    favoritos.push(v)
+    localStorage.setItem('favoritos', JSON.stringify(favoritos))
+    window.dispatchEvent(new Event('storage'))
+  }
+}
 
 const agregarFavorito = async () => {
-  try {
-    await api.post('/favoritos/' + props.vehiculo.id)
-    alert('Añadido a favoritos')
-  } catch {
-    alert('Debes iniciar sesión')
+  // Guardamos siempre en local para feedback inmediato (UX)
+  guardarEnLocalStorage(props.vehiculo)
+
+  // Si el usuario está autenticado, también lo persistimos en backend
+  const token = localStorage.getItem('token')
+  if (token) {
+    try {
+      await api.post('/favoritos/' + props.vehiculo.id)
+    } catch (err) {
+      // Silencioso: el favorito ya está guardado localmente
+      console.warn('No se pudo sincronizar el favorito con el servidor', err)
+    }
   }
 }
 </script>

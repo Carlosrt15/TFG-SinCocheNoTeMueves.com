@@ -83,8 +83,8 @@
                   <td>{{ u.email }}</td>
                   <td>{{ u.dni }}</td>
                   <td>
-                    <span class="badge" :class="u.rol === 'admin' ? 'badge-gold' : 'badge-blue'">
-                      {{ u.rol === 'admin' ? '⭐ Admin' : '👤 User' }}
+                    <span class="badge" :class="u.rol === 'ADMIN' ? 'badge-gold' : 'badge-blue'">
+                      {{ u.rol === 'ADMIN' ? '⭐ Admin' : '👤 User' }}
                     </span>
                   </td>
                   <td>
@@ -94,9 +94,9 @@
                   </td>
                   <td>
                     <div class="action-btns">
-                      <button v-if="!u.bloqueado && u.rol !== 'admin'" class="btn-action btn-warn" @click="bloquearUsuario(u)">Bloquear</button>
+                      <button v-if="!u.bloqueado && u.rol !== 'ADMIN'" class="btn-action btn-warn" @click="bloquearUsuario(u)">Bloquear</button>
                       <button v-if="u.bloqueado" class="btn-action btn-success" @click="desbloquearUsuario(u)">Desbloquear</button>
-                      <button v-if="u.rol !== 'admin'" class="btn-action btn-danger" @click="eliminarUsuario(u)">Eliminar</button>
+                      <button v-if="u.rol !== 'ADMIN'" class="btn-action btn-danger" @click="eliminarUsuario(u)">Eliminar</button>
                     </div>
                   </td>
                 </tr>
@@ -153,7 +153,7 @@ const usuariosFiltrados = computed(() => {
 
 onMounted(async () => {
   const datos = localStorage.getItem('usuario')
-  if (datos) { const user = JSON.parse(datos); esAdmin.value = user.rol === 'admin' }
+  if (datos) { const user = JSON.parse(datos); esAdmin.value = user.rol === 'ADMIN' }
   if (esAdmin.value) {
     try { const res = await api.get('/admin/usuarios'); usuarios.value = res.data }
     catch { console.error('Error al cargar usuarios') }

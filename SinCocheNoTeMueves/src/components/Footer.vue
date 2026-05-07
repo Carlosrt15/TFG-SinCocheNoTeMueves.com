@@ -13,9 +13,9 @@
             El marketplace de vehículos más completo de España. Compra, vende y alquila con total seguridad.
           </p>
           <div class="footer-social">
-            <a href="#" class="social-btn" aria-label="Instagram">📸</a>
-            <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
-            <a href="#" class="social-btn" aria-label="LinkedIn">💼</a>
+            <a href="https://www.instagram.com/sincochenotemueves" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram">📸</a>
+            <a href="https://x.com/sincochenotemueves" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="X">🐦</a>
+            <a href="https://www.linkedin.com/company/sincochenotemueves" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn">💼</a>
           </div>
         </div>
 
@@ -58,9 +58,9 @@
       <div class="container footer-bottom-inner">
         <p>© 2026 SinCocheNoTeMueves — Proyecto DAW</p>
         <div class="footer-bottom-links">
-          <router-link to="/contacto">Política de privacidad</router-link>
-          <router-link to="/contacto">Términos de uso</router-link>
-          <router-link to="/contacto">Cookies</router-link>
+          <router-link to="/politica-privacidad">Política de privacidad</router-link>
+          <router-link to="/terminos-servicio">Términos de uso</router-link>
+          <router-link to="/politica-cookies">Cookies</router-link>
         </div>
       </div>
     </div>

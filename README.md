@@ -138,9 +138,15 @@ El frontend arranca en `http://localhost:5173`.
 
 Sistema de ramas:
 
+<<<<<<< HEAD
 - `main` → versión estable
 - `feature/*` → nuevas funcionalidades
 - `fix/*` → corrección de errores
+=======
+- `main` → versión estable del proyecto  
+- `feature/*` → nuevas funcionalidades  
+  
+>>>>>>> 7340b0a797af59b36fbda7a40179ce88e6869aa2
 
 Cada funcionalidad se desarrolla en su propia rama y se integra mediante Pull Request.
 

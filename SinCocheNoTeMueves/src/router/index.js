@@ -13,6 +13,9 @@ import Admin from '../views/AdminView.vue'
 import PublicarVehiculo from '../views/PublicarVehiculoView.vue'
 import EditarVehiculo from '../views/EditarVehiculoView.vue'
 import ConfirmarCompra from '../views/ConfirmarCompraView.vue'
+import PoliticaPrivacidad from '../views/PoliticaPrivacidadView.vue'
+import TerminosServicio from '../views/TerminosServicioView.vue'
+import PoliticaCookies from '../views/PoliticaCookiesView.vue'
 
 const routes = [
 
@@ -40,7 +43,13 @@ const routes = [
 
   { path: '/editar/:id', component: EditarVehiculo },
 
-  { path: '/comprar/:id', component: ConfirmarCompra }
+  { path: '/comprar/:id', component: ConfirmarCompra },
+
+  { path: '/politica-privacidad', component: PoliticaPrivacidad },
+
+  { path: '/terminos-servicio', component: TerminosServicio },
+
+  { path: '/politica-cookies', component: PoliticaCookies }
 
 ]
 

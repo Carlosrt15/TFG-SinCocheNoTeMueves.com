@@ -31,7 +31,7 @@
         <div v-if="mensajeExito" class="alert alert-success">✅ {{ mensajeExito }}</div>
         <div v-if="mensajeError" class="alert alert-error">⚠️ {{ mensajeError }}</div>
 
-        <form @submit.prevent="registrar" class="registro-form">
+        <form @submit.prevent="registrar" class="auth-form">
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Nombre</label>
@@ -75,7 +75,8 @@
         </form>
 
         <p class="auth-legal">
-          Al registrarte aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de privacidad</a>
+          Al registrarte aceptas nuestros <router-link to="/terminos-servicio">Términos de uso</router-link> y
+          <router-link to="/politica-privacidad">Política de datos y privacidad</router-link>
         </p>
       </div>
     </div>
@@ -203,7 +204,7 @@ const registrar = async () => {
 
 .auth-form-wrap {
   width: 100%;
-  max-width: 440px;
+  max-width: 400px;
 }
 
 .auth-logo {
@@ -214,10 +215,10 @@ const registrar = async () => {
   font-size: 1.1rem;
   font-weight: 800;
   text-decoration: none;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
 }
 
-.auth-header { margin-bottom: 28px; }
+.auth-header { margin-bottom: 32px; }
 
 .auth-header h1 { font-size: 1.9rem; margin-bottom: 8px; }
 
@@ -226,7 +227,7 @@ const registrar = async () => {
 .auth-header a { color: var(--primary); font-weight: 600; text-decoration: none; }
 .auth-header a:hover { text-decoration: underline; }
 
-.registro-form { display: flex; flex-direction: column; }
+.auth-form { display: flex; flex-direction: column; gap: 0; }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
@@ -245,7 +246,7 @@ const registrar = async () => {
 @media (max-width: 768px) {
   .auth-page { grid-template-columns: 1fr; }
   .auth-left { display: none; }
-  .auth-right { padding: 36px 20px; }
+  .auth-right { padding: 40px 24px; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
 }
 </style>

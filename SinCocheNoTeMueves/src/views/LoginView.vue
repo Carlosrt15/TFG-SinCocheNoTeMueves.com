@@ -142,6 +142,7 @@ const login = async () => {
   align-items: center;
   justify-content: center;
   padding: 48px 32px;
+  overflow-y: auto;
 }
 
 .auth-form-wrap {

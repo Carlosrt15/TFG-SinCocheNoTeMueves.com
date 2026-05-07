@@ -6,6 +6,54 @@ la aplicación y pulir aristas estéticas / de accesibilidad.
 
 ---
 
+## 📅 Segunda ronda de saneamiento (despliegue local en Windows + Docker MySQL)
+
+Tras los fixes iniciales, al desplegar en local en una máquina Windows con
+MySQL en Docker aparecieron varios problemas de entorno que se han resuelto:
+
+### Conflictos de merge en archivos clave (causaban `fatal: Exiting because of an unresolved conflict` en VS Code)
+**Archivos afectados:**
+- `SinCocheNoTeMueves/src/services/api.js`
+- `TFG-SinCocheNoTeMueves.com/src/main/java/com/tfg/backend/controller/VehiculoController.java`
+- `README.md`
+
+**Problema:** los tres archivos tenían marcadores `<<<<<<< HEAD ... ======= ... >>>>>>>` sin resolver, herencia de un merge a medias entre la rama local y `origin/main`.
+**Solución:** resueltos los conflictos eligiendo la mejor versión de cada bloque y eliminando los marcadores. En `VehiculoController` se ha integrado además la asignación automática del propietario al crear un vehículo (extrayendo el email del JWT del header `Authorization`).
+
+### Estructura de carpetas duplicada (compilation error: 31 duplicate classes)
+**Problema:** dentro del proyecto bueno (`TFG-SinCocheNoTeMueves.com/`) coexistían dos jerarquías de paquetes Java:
+- `src/main/java/com.tfg.backend/` (con puntos, ROTA, herencia del repo original)
+- `src/main/java/com/tfg/backend/` (anidada, CORRECTA)
+
+Maven detectaba ambas y reportaba 31 clases duplicadas. Adicionalmente, en la raíz del repo había un `src/`, `target/`, `pom.xml` y `package-lock.json` huérfanos del proyecto original.
+**Solución:** eliminada por completo la carpeta `com.tfg.backend/` y todos los huérfanos de la raíz. Solo queda la estructura correcta.
+
+### Configuración para Docker MySQL en red bridge (172.x.x.x)
+**Archivo:** `application.properties`
+**Problema:** MySQL corre en un contenedor Docker (`laravel_mysql`) compartido con otro proyecto. Spring Boot, al conectar desde el host, aparecía visto desde MySQL como `172.19.0.1` (IP del bridge), sin permiso. Adicionalmente, `caching_sha2_password` exigía `allowPublicKeyRetrieval=true` o SSL. El `MySQL8Dialect` antiguo está deprecado en Hibernate 6.4.
+**Solución:**
+- URL JDBC con `127.0.0.1` (en lugar de `localhost`, evita ambigüedades de resolución).
+- Añadidos parámetros `useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Europe/Madrid`.
+- Eliminada la propiedad `spring.jpa.properties.hibernate.dialect=MySQL8Dialect` (Hibernate 6 lo detecta solo).
+- Puerto cambiado de 8080 a **8090** (el 8080 lo ocupa el nginx de Peitigestion en este equipo).
+
+### Usuario MySQL dedicado para el TFG
+**Archivo nuevo:** `setup-mysql.sql`
+**Problema:** el usuario `root` del contenedor MySQL pertenece al proyecto Peitigestion y tiene su propia contraseña. Tocarle la contraseña a `root` rompería ese proyecto.
+**Solución:** se ha creado un script SQL que aprovisiona un usuario `tfg`@`%` con contraseña `tfg2026`, y le otorga privilegios solo sobre la base `sincochenotemueves`. Esto sigue además la **buena práctica de separación de privilegios** (cada aplicación con su propio usuario y BD), defendible en el TFG. El `application.properties` apunta a este usuario.
+
+### Frontend: api.js apuntando al puerto correcto
+**Archivo:** `SinCocheNoTeMueves/src/services/api.js`
+**Problema:** apuntaba a `localhost:8080`, pero el backend está en 8090.
+**Solución:** `baseURL: 'http://localhost:8090/api'`. Conservado el interceptor de respuesta 401 que limpia el token al expirar.
+
+### Eliminado `authService.js` duplicado y obsoleto
+**Archivo:** `SinCocheNoTeMueves/src/services/authService.js`
+**Problema:** duplicado de `api.js` con peor formato y URL antigua a 8080. Sin referencias en ningún otro archivo.
+**Solución:** borrado.
+
+---
+
 ## 🔴 Bugs CRÍTICOS (impedían arrancar el proyecto)
 
 ### 1. `vue-router 5.0.3` no es compatible con Vue 3

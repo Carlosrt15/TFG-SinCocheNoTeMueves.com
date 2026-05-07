@@ -1,0 +1,19 @@
+# Maven
+target/
+
+# IntelliJ / VS Code
+.idea/
+.vscode/
+*.iml
+
+# Datos persistentes de H2 (no se versionan)
+data/
+*.mv.db
+*.trace.db
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

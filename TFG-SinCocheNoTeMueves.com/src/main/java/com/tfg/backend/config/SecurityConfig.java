@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -18,7 +19,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable())
+                // CSRF: deshabilitado para API REST + permitir formulario login de la consola H2
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
+                        .disable()
+                )
+                // Permitir que la consola de H2 se muestre en un <iframe> (la consola
+                // se carga dentro de un frame de su propia pagina, sin esto Spring
+                // Security pone X-Frame-Options: DENY y la consola sale en blanco).
+                .headers(h -> h.frameOptions(f -> f.sameOrigin()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints publicos
@@ -27,6 +36,8 @@ public class SecurityConfig {
                                 "/api/usuarios/registro",
                                 "/api/contacto"
                         ).permitAll()
+                        // Consola H2 (solo desarrollo)
+                        .requestMatchers("/h2-console/**").permitAll()
                         // Listado y detalle de vehiculos publicos (GET)
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/vehiculos/**").permitAll()
                         // Solo admin

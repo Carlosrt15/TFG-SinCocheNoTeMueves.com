@@ -1,0 +1,8 @@
+# IntelliJ / VS Code
+.idea/
+.vscode/
+*.iml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
